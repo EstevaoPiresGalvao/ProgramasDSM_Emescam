@@ -35,6 +35,27 @@
         </div>
     </div>
 
+    <!-- =========================================
+         QUADRO SOBREPOSTO DOS MINI-GAMES
+         ========================================= -->
+    <div id="miniGameOverlay" class="OverlayMiniGame">
+        <div class="QuadroMiniGame">
+            <div class="CabecalhoMiniGame">
+                <h3 id="tituloMiniGame" class="TituloMiniGame">Mini-Game</h3>
+                <span id="badgeProgressoMiniGame" class="BadgeMiniGame">Missão</span>
+            </div>
+
+            <p id="instrucaoMiniGame" class="InstrucaoMiniGame"></p>
+
+            <!-- Área dinâmica onde cada mini-game é desenhado -->
+            <div id="conteudoMiniGame" class="ConteudoMiniGame"></div>
+
+            <p id="feedbackMiniGame" class="FeedbackMiniGame"></p>
+
+            <div id="rodapeMiniGame" class="RodapeMiniGame"></div>
+        </div>
+    </div>
+
     <!-- Barra superior do Totem (Jogador + Pontos + Finalizar) -->
     <header class="BarraTotem">
         <div class="InfoJogador">
@@ -61,7 +82,6 @@
         </button>
 
         <div id="menuCaua" class="OrganizarBotoes">
-            <!-- Balão de fala do Cauã -->
             <div class="BalaoPersonagem">
                 <span class="NomeFalante">Cauã diz:</span>
                 <p id="falaCaua" class="TextoFalante"></p>
@@ -75,7 +95,7 @@
                 Oxi, dá teu jeito irmão.
             </button>
             <button id="13caua" type="button" onclick="Responder('Caua', 10)" class="BalaodeFalaNormal">
-                Claro, quer que eu te acompanhe até onde?
+                Claro! Vamos juntos, eu te guio até a porta.
             </button>
         </div>
     </div>
@@ -87,7 +107,6 @@
         </button>
 
         <div id="menuOsana" class="OrganizarBotoes">
-            <!-- Balão de fala da Osana -->
             <div class="BalaoPersonagem">
                 <span class="NomeFalante">Osana diz:</span>
                 <p id="falaOsana" class="TextoFalante"></p>
@@ -101,7 +120,7 @@
                 É melhor você ficar na sala mesmo, lá fora está cheio.
             </button>
             <button id="13Osana" type="button" onclick="Responder('Osana', 10)" class="BalaodeFalaNormal">
-                Quer ajuda para afastar aquela carteira da passagem?
+                Claro! Quer ajuda para desenrolar essas cordas da roda?
             </button>
         </div>
     </div>
@@ -113,7 +132,6 @@
         </button>
 
         <div id="menuRamirez" class="OrganizarBotoes">
-            <!-- Balão de fala do Ramirez -->
             <div class="BalaoPersonagem">
                 <span class="NomeFalante">Ramirez diz:</span>
                 <p id="falaRamirez" class="TextoFalante"></p>
@@ -127,7 +145,7 @@
                 Deixar para lá, vai dar muito trabalho explicar.
             </button>
             <button id="13Ramirez" type="button" onclick="Responder('Ramirez', 10)" class="BalaodeFalaNormal">
-                Tocar levemente no ombro dele, olhar de frente e gesticular.
+                Tocar levemente no ombro dele, olhar de frente e fazer sinais.
             </button>
         </div>
     </div>

@@ -4,17 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Academia da Inclusão - Sala de Aula</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="AcademiadaInclusao.css">
 </head>
 
 <body>
+    <!-- Tela Intermediária de Carregamento da Sala -->
+    <div id="telaCarregamentoSala" class="TelaCarregamento">
+        <div class="CaixaLoader">
+            <h2 class="TituloLoader">SALA DE AULA Nº 8</h2>
+            <p class="TextoLoader">Carregando cenário e colegas...</p>
+            <div class="BarraProgressoFundo">
+                <div id="barraProgressoSala" class="BarraProgressoPreenchimento"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Balão de aviso / reação na própria página (substitui o alert) -->
+    <div id="balaoAvisoOverlay" class="OverlayBalaoAviso">
+        <div class="BalaoAviso">
+            <h3 id="tituloBalaoAviso" class="TituloBalaoAviso">Aviso</h3>
+            <p id="textoBalaoAviso" class="TextoBalaoAviso"></p>
+            <div id="acoesBalaoAviso" class="AcoesBalaoAviso">
+                <button type="button" id="botaoBalaoAviso" class="BotaoBalaoAviso" onclick="FecharBalaoAviso()">
+                    CONTINUAR
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Barra superior do Totem (Jogador + Pontos + Finalizar) -->
     <header class="BarraTotem">
         <div class="InfoJogador">
             <span id="hudJogador">Jogador: Visitante</span>
             <span id="hudPontos" class="BadgePontos">Pontos: 0</span>
         </div>
-        <button type="button" class="BotaoFinalizar" onclick="FinalizarJogo()">
+        <button type="button" class="BotaoFinalizar" onclick="ConfirmarFinalizacao()">
             FINALIZAR RODADA
         </button>
     </header>
@@ -34,7 +61,13 @@
         </button>
 
         <div id="menuCaua" class="OrganizarBotoes">
-            <p class="InstrucaoMenu">Como você responde ao Cauã?</p>
+            <!-- Balão de fala do Cauã -->
+            <div class="BalaoPersonagem">
+                <span class="NomeFalante">Cauã diz:</span>
+                <p id="falaCaua" class="TextoFalante"></p>
+            </div>
+
+            <p class="InstrucaoMenu">Como você responde?</p>
             <button id="11caua" type="button" onclick="Responder('Caua', -5)" class="BalaodeFalaNormal">
                 Desculpa, estou ocupado agora.
             </button>
@@ -54,7 +87,13 @@
         </button>
 
         <div id="menuOsana" class="OrganizarBotoes">
-            <p class="InstrucaoMenu">Como você responde à Osana?</p>
+            <!-- Balão de fala da Osana -->
+            <div class="BalaoPersonagem">
+                <span class="NomeFalante">Osana diz:</span>
+                <p id="falaOsana" class="TextoFalante"></p>
+            </div>
+
+            <p class="InstrucaoMenu">Como você responde?</p>
             <button id="11Osana" type="button" onclick="Responder('Osana', -5)" class="BalaodeFalaNormal">
                 Deixa que eu empurro sua cadeira logo! (sem pedir)
             </button>
@@ -74,7 +113,13 @@
         </button>
 
         <div id="menuRamirez" class="OrganizarBotoes">
-            <p class="InstrucaoMenu">Como você fala com o Ramirez?</p>
+            <!-- Balão de fala do Ramirez -->
+            <div class="BalaoPersonagem">
+                <span class="NomeFalante">Ramirez diz:</span>
+                <p id="falaRamirez" class="TextoFalante"></p>
+            </div>
+
+            <p class="InstrucaoMenu">O que você faz?</p>
             <button id="11Ramirez" type="button" onclick="Responder('Ramirez', -5)" class="BalaodeFalaNormal">
                 Gritar bem alto de costas para ele ouvir.
             </button>

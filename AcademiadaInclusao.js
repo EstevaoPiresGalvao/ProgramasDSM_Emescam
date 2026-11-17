@@ -68,7 +68,7 @@ function ControlarCarregamentoPagina(idTela, idBarra, imagensExtras = []) {
     if (!tela) return;
 
     const imgsDOM = Array.from(document.querySelectorAll("img"));
-    const totalRecursos = imgsDOM.length + imagensExtras.length + 1; // +1 para fontes
+    const totalRecursos = imgsDOM.length + imagensExtras.length + 1;
     let carregados = 0;
     let finalizado = false;
 
@@ -92,7 +92,6 @@ function ControlarCarregamentoPagina(idTela, idBarra, imagensExtras = []) {
         }, 350);
     }
 
-    // Monitora imagens no HTML
     imgsDOM.forEach((img) => {
         if (img.complete) {
             atualizarProgresso();
@@ -102,7 +101,6 @@ function ControlarCarregamentoPagina(idTela, idBarra, imagensExtras = []) {
         }
     });
 
-    // Monitora imagens de fundo/extras (como saladeAula.png)
     imagensExtras.forEach((src) => {
         const preImg = new Image();
         preImg.onload = atualizarProgresso;
@@ -110,14 +108,12 @@ function ControlarCarregamentoPagina(idTela, idBarra, imagensExtras = []) {
         preImg.src = src;
     });
 
-    // Monitora fontes
     if (document.fonts && document.fonts.ready) {
         document.fonts.ready.then(atualizarProgresso).catch(atualizarProgresso);
     } else {
         atualizarProgresso();
     }
 
-    // Garantia máxima de 3.5s para nunca travar o totem
     setTimeout(concluirCarregamento, 3500);
 }
 
@@ -125,7 +121,6 @@ function ControlarCarregamentoPagina(idTela, idBarra, imagensExtras = []) {
    INICIALIZAÇÃO AUTOMÁTICA DAS PÁGINAS
    ========================================= */
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. Tela Inicial (index.html)
     if (document.getElementById("telaCarregamentoInicial")) {
         ControlarCarregamentoPagina("telaCarregamentoInicial", "barraProgressoInicial");
     }
@@ -134,7 +129,6 @@ document.addEventListener("DOMContentLoaded", () => {
         CarregarRanking();
     }
 
-    // 2. Sala de Aula (AcademiadaInclusao.html)
     if (document.getElementById("telaCarregamentoSala")) {
         ControlarCarregamentoPagina("telaCarregamentoSala", "barraProgressoSala", ["saladeAula.png"]);
     }
@@ -208,7 +202,6 @@ function PrepararInicio(event) {
     localStorage.setItem("jogadorCurso", curso);
     localStorage.setItem("jogadorHeroi", HeroiSelecionado);
 
-    // Exibe a tela intermediária entre o Index e o Jogo enquanto pré-carrega a sala
     IniciarTransicaoParaSala(nome, HeroiSelecionado);
 }
 
@@ -232,7 +225,6 @@ function IniciarTransicaoParaSala(nomeJogador, heroi) {
 
     telaTransicao.classList.remove("oculta");
 
-    // Pré-carrega os arquivos pesados da fase antes de mudar de página
     const assetsSala = ["saladeAula.png", "CauaInicial.png", "Osana.png", "Ramirez.png"];
     let carregados = 0;
     let redirecionado = false;
@@ -260,7 +252,6 @@ function IniciarTransicaoParaSala(nomeJogador, heroi) {
         img.src = arquivo;
     });
 
-    // Fallback de segurança
     setTimeout(avancarParaJogo, 2500);
 }
 
@@ -290,11 +281,11 @@ function PreencherFalasPersonagens(heroi) {
     const falaRamirez = document.getElementById("falaRamirez");
 
     if (falaCaua) {
-        falaCaua.innerHTML = `"E aí, <span class="DestaqueHeroi">${heroi}</span>! Tudo tranquilo? O sinal do recreio já bateu, mas estou com receio de esbarrar nas carteiras. Pode me dar uma ajuda por favor?"`;
+        falaCaua.innerHTML = `"E aí, <span class="DestaqueHeroi">${heroi}</span>! Tudo tranquilo? O sinal do recreio já bateu, mas estou com receio de esbarrar nas carteiras. Pode me guiar até a porta?"`;
     }
 
     if (falaOsana) {
-        falaOsana.innerHTML = `"Oi, <span class="DestaqueHeroi">${heroi}</span>! Que bom que você ainda está aí! Deixaram uma carteira bem na passagem e minha cadeira não passa. Dá uma mãozinha aqui?"`;
+        falaOsana.innerHTML = `"Oi, <span class="DestaqueHeroi">${heroi}</span>! Que bom que você ainda está aí! Umas cordas enroscaram na roda da minha cadeira e ela travou. Dá uma mãozinha aqui?"`;
     }
 
     if (falaRamirez) {
@@ -305,17 +296,17 @@ function PreencherFalasPersonagens(heroi) {
 function ObterReacaoPersonagem(nomePersonagem, pontos, heroi) {
     const reacoes = {
         Caua: {
-            10: `<strong>Cauã:</strong> "Valeu mesmo, <span class="DestaqueHeroi">${heroi}</span>! Perguntar antes e me guiar com calma faz toda a diferença!" (+10 pts)`,
+            10: `<strong>Cauã:</strong> "Valeu mesmo, <span class="DestaqueHeroi">${heroi}</span>! Me guiar desviando das carteiras com calma faz toda a diferença!" (+20 pts com bônus de ajuda!)`,
             "-5": `<strong>Cauã:</strong> "Ah, tudo bem, <span class="DestaqueHeroi">${heroi}</span>... vou tentar ir bem devagar com a minha bengala." (-5 pts)`,
             "-10": `<strong>Cauã:</strong> "Poxa, <span class="DestaqueHeroi">${heroi}</span>... não precisava responder assim, eu só pedi uma ajuda." (-10 pts)`
         },
         Osana: {
-            10: `<strong>Osana:</strong> "Muito obrigada, <span class="DestaqueHeroi">${heroi}</span>! Perguntar antes e liberar o caminho respeita minha autonomia!" (+10 pts)`,
+            10: `<strong>Osana:</strong> "Muito obrigada, <span class="DestaqueHeroi">${heroi}</span>! Perguntar antes e desenrolar as cordas da roda respeita minha autonomia!" (+20 pts com bônus de ajuda!)`,
             "-5": `<strong>Osana:</strong> "Ei, <span class="DestaqueHeroi">${heroi}</span>! Nunca empurre a cadeira de rodas sem pedir antes, isso pode me desequilibrar!" (-5 pts)`,
             "-10": `<strong>Osana:</strong> "Que chato ouvir isso, <span class="DestaqueHeroi">${heroi}</span>... eu tenho tanto direito de ir ao recreio quanto qualquer colega." (-10 pts)`
         },
         Ramirez: {
-            10: `<strong>Ramirez:</strong> "Obrigado por tocar no meu ombro e falar de frente, <span class="DestaqueHeroi">${heroi}</span>! Assim consigo ler seus lábios perfeitamente!" (+10 pts)`,
+            10: `<strong>Ramirez:</strong> "Obrigado por tocar no meu ombro e fazer os sinais de frente, <span class="DestaqueHeroi">${heroi}</span>! Entendi direitinho que já é hora do recreio!" (+20 pts com bônus de ajuda!)`,
             "-5": `<strong>Ramirez:</strong> "Ai! Gritar de costas não ajuda a me fazer ouvir, <span class="DestaqueHeroi">${heroi}</span>... o ideal é falar de frente!" (-5 pts)`,
             "-10": `<strong>Ramirez:</strong> "Que pena, <span class="DestaqueHeroi">${heroi}</span>... incluir é justamente buscar formas de conversar com todos." (-10 pts)`
         }
@@ -367,6 +358,17 @@ function FecharDialogo() {
 function Responder(nomePersonagem, pontos) {
     if (personagensRespondidos[nomePersonagem]) return;
 
+    FecharDialogo();
+
+    // Se o jogador decidiu ajudar (pontos > 0), abre o mini-game específico do personagem!
+    if (pontos > 0) {
+        VariacaoPontos = pontos;
+        AtualizarPontos();
+        IniciarMiniGame(nomePersonagem);
+        return;
+    }
+
+    // Se recusou ajuda, finaliza a interação diretamente com penalidade
     personagensRespondidos[nomePersonagem] = true;
     const botaoPersonagem = document.getElementById(nomePersonagem);
     if (botaoPersonagem) {
@@ -375,14 +377,16 @@ function Responder(nomePersonagem, pontos) {
 
     VariacaoPontos = pontos;
     AtualizarPontos();
-    FecharDialogo();
+    ExibirConclusaoInteracao(nomePersonagem, pontos);
+}
 
+function ExibirConclusaoInteracao(nomePersonagem, pontosBase) {
     const heroi = localStorage.getItem("jogadorHeroi") || "Milly";
-    const mensagemReacao = ObterReacaoPersonagem(nomePersonagem, pontos, heroi);
+    const mensagemReacao = ObterReacaoPersonagem(nomePersonagem, pontosBase, heroi);
     const todosRespondidos = personagens.every((nome) => personagensRespondidos[nome]);
 
     MostrarBalaoAviso(
-        pontos > 0 ? "Ótima atitude!" : "Atenção na inclusão!",
+        pontosBase > 0 ? "Ajuda Concluída!" : "Atenção na inclusão!",
         mensagemReacao,
         todosRespondidos ? "VER RESULTADO FINAL" : "CONTINUAR",
         () => {
@@ -398,6 +402,672 @@ function Responder(nomePersonagem, pontos) {
     );
 }
 
+/* =========================================
+   CONTROLADOR GERAL DOS MINI-GAMES
+   ========================================= */
+function IniciarMiniGame(nomePersonagem) {
+    const overlay = document.getElementById("miniGameOverlay");
+    const feedback = document.getElementById("feedbackMiniGame");
+    const rodape = document.getElementById("rodapeMiniGame");
+
+    if (!overlay) return;
+
+    if (feedback) {
+        feedback.textContent = "";
+        feedback.className = "FeedbackMiniGame";
+    }
+    if (rodape) {
+        rodape.innerHTML = "";
+    }
+
+    overlay.classList.add("ativo");
+
+    if (nomePersonagem === "Caua") {
+        MontarMiniGameCaua();
+    } else if (nomePersonagem === "Osana") {
+        MontarMiniGameOsana();
+    } else if (nomePersonagem === "Ramirez") {
+        MontarMiniGameRamirez();
+    }
+}
+
+function ConcluirMiniGame(nomePersonagem) {
+    const overlay = document.getElementById("miniGameOverlay");
+    if (overlay) {
+        overlay.classList.remove("ativo");
+    }
+
+    personagensRespondidos[nomePersonagem] = true;
+    const botaoPersonagem = document.getElementById(nomePersonagem);
+    if (botaoPersonagem) {
+        botaoPersonagem.classList.add("respondido");
+    }
+
+    // Bônus de +10 pts por completar o mini-game de ajuda
+    VariacaoPontos = 10;
+    AtualizarPontos();
+
+    ExibirConclusaoInteracao(nomePersonagem, 10);
+}
+
+/* =========================================
+   MINI-GAME 1: CAUÃ (GUIAR ATÉ A PORTA)
+   ========================================= */
+function MontarMiniGameCaua() {
+    const titulo = document.getElementById("tituloMiniGame");
+    const badge = document.getElementById("badgeProgressoMiniGame");
+    const instrucao = document.getElementById("instrucaoMiniGame");
+    const conteudo = document.getElementById("conteudoMiniGame");
+    const feedback = document.getElementById("feedbackMiniGame");
+    const rodape = document.getElementById("rodapeMiniGame");
+    const heroi = localStorage.getItem("jogadorHeroi") || "Milly";
+
+    titulo.textContent = "Guie o Cauã até a Porta";
+    badge.textContent = "Trajeto";
+    instrucao.innerHTML = `Desenhe com o dedo um caminho livre pelos corredores, levando o <strong>Cauã</strong> (verde) e <strong>${heroi}</strong> (amarelo) até a <strong>PORTA</strong> sem bater nas carteiras!`;
+
+    conteudo.innerHTML = `<canvas id="canvasCaua" width="600" height="440" class="CanvasMiniGame"></canvas>`;
+    rodape.innerHTML = `<button type="button" id="btnLimparTrajeto" class="BotaoAcaoMiniGame">LIMPAR TRAJETO</button>`;
+
+    const canvas = document.getElementById("canvasCaua");
+    const ctx = canvas.getContext("2d");
+
+    const inicio = { x: 95, y: 375 };
+    const porta = { x: 420, y: 0, w: 125, h: 42 };
+    const carteiras = [
+        { x: 65,  y: 105, w: 100, h: 68, erro: false },
+        { x: 245, y: 105, w: 100, h: 68, erro: false },
+        { x: 65,  y: 245, w: 100, h: 68, erro: false },
+        { x: 245, y: 245, w: 100, h: 68, erro: false },
+        { x: 425, y: 245, w: 100, h: 68, erro: false }
+    ];
+
+    let pontosTrajeto = [];
+    let desenhando = false;
+    let animando = false;
+    let posCaua = { x: inicio.x, y: inicio.y };
+
+    function desenharMapa() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Piso da sala
+        ctx.fillStyle = "#cbd5e1";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Grade sutil do piso
+        ctx.strokeStyle = "rgba(15, 23, 42, 0.08)";
+        ctx.lineWidth = 1;
+        for (let x = 0; x < canvas.width; x += 40) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, canvas.height);
+            ctx.stroke();
+        }
+        for (let y = 0; y < canvas.height; y += 40) {
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(canvas.width, y);
+            ctx.stroke();
+        }
+
+        // Paredes externas
+        ctx.strokeStyle = "#1e293b";
+        ctx.lineWidth = 12;
+        ctx.strokeRect(0, 0, canvas.width, canvas.height);
+
+        // Porta de saída (verde destaque)
+        ctx.fillStyle = "#22c55e";
+        ctx.fillRect(porta.x, porta.y, porta.w, porta.h);
+        ctx.strokeStyle = "#14532d";
+        ctx.lineWidth = 3;
+        ctx.strokeRect(porta.x, porta.y, porta.w, porta.h);
+
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "800 18px Inter, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("PORTA ▲", porta.x + porta.w / 2, 27);
+
+        // Carteiras / Cadeiras (quadradinhos)
+        carteiras.forEach((c) => {
+            // Encosto da cadeira
+            ctx.fillStyle = c.erro ? "#991b1b" : "#78350f";
+            ctx.fillRect(c.x + 14, c.y + c.h - 4, c.w - 28, 12);
+
+            // Mesa
+            ctx.fillStyle = c.erro ? "#ef4444" : "#b45309";
+            ctx.beginPath();
+            ctx.roundRect(c.x, c.y, c.w, c.h, 8);
+            ctx.fill();
+
+            ctx.strokeStyle = c.erro ? "#fecaca" : "#451a03";
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            ctx.fillStyle = "#fef3c7";
+            ctx.font = "700 13px Inter, sans-serif";
+            ctx.fillText("Carteira", c.x + c.w / 2, c.y + c.h / 2 + 5);
+        });
+
+        // Linha do trajeto desenhado
+        if (pontosTrajeto.length > 1) {
+            ctx.save();
+            ctx.strokeStyle = "#f59e0b";
+            ctx.lineWidth = 10;
+            ctx.lineCap = "round";
+            ctx.lineJoin = "round";
+            ctx.setLineDash([14, 10]);
+            ctx.beginPath();
+            ctx.moveTo(pontosTrajeto[0].x, pontosTrajeto[0].y);
+            for (let i = 1; i < pontosTrajeto.length; i++) {
+                ctx.lineTo(pontosTrajeto[i].x, pontosTrajeto[i].y);
+            }
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        // Bolinha do Herói (caminhando ao lado do Cauã)
+        ctx.fillStyle = "#ffd166";
+        ctx.beginPath();
+        ctx.arc(posCaua.x + 34, posCaua.y + 6, 17, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = "#111111";
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        ctx.fillStyle = "#111111";
+        ctx.font = "800 12px Inter, sans-serif";
+        ctx.fillText(heroi, posCaua.x + 34, posCaua.y + 36);
+
+        // Bolinha do Cauã
+        ctx.fillStyle = "#16a34a";
+        ctx.beginPath();
+        ctx.arc(posCaua.x, posCaua.y, 19, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        ctx.fillStyle = "#0f172a";
+        ctx.font = "800 13px Inter, sans-serif";
+        ctx.fillText("Cauã", posCaua.x, posCaua.y + 34);
+    }
+
+    function obterPosicaoToque(e) {
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        return {
+            x: (e.clientX - rect.left) * scaleX,
+            y: (e.clientY - rect.top) * scaleY
+        };
+    }
+
+    function colidiuCarteira(pt) {
+        const margem = 10;
+        for (const c of carteiras) {
+            if (
+                pt.x >= c.x - margem &&
+                pt.x <= c.x + c.w + margem &&
+                pt.y >= c.y - margem &&
+                pt.y <= c.y + c.h + margem
+            ) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    function chegouNaPorta(pt) {
+        return (
+            pt.x >= porta.x - 10 &&
+            pt.x <= porta.x + porta.w + 10 &&
+            pt.y <= porta.h + 18
+        );
+    }
+
+    function resetarTrajeto(mensagem = "", erro = false) {
+        if (animando) return;
+        pontosTrajeto = [];
+        posCaua = { x: inicio.x, y: inicio.y };
+        carteiras.forEach((c) => (c.erro = false));
+        feedback.textContent = mensagem;
+        feedback.className = erro ? "FeedbackMiniGame erro" : "FeedbackMiniGame";
+        desenharMapa();
+    }
+
+    function animarCaminhada() {
+        animando = true;
+        badge.textContent = "Guiando...";
+        feedback.textContent = "Caminho livre! Acompanhando o Cauã até a porta...";
+        feedback.className = "FeedbackMiniGame sucesso";
+
+        let indice = 0;
+        function passo() {
+            if (indice < pontosTrajeto.length) {
+                posCaua = pontosTrajeto[indice];
+                indice += 2;
+                desenharMapa();
+                requestAnimationFrame(passo);
+            } else {
+                posCaua = { x: porta.x + porta.w / 2 - 15, y: 26 };
+                desenharMapa();
+                badge.textContent = "Concluído!";
+                setTimeout(() => ConcluirMiniGame("Caua"), 550);
+            }
+        }
+        requestAnimationFrame(passo);
+    }
+
+    canvas.addEventListener("pointerdown", (e) => {
+        if (animando) return;
+        canvas.setPointerCapture(e.pointerId);
+        const pt = obterPosicaoToque(e);
+        const distInicio = Math.hypot(pt.x - inicio.x, pt.y - inicio.y);
+
+        if (distInicio <= 75) {
+            desenhando = true;
+            carteiras.forEach((c) => (c.erro = false));
+            pontosTrajeto = [{ x: inicio.x, y: inicio.y }, pt];
+            feedback.textContent = "Continue arrastando até a PORTA lá em cima!";
+            feedback.className = "FeedbackMiniGame";
+            desenharMapa();
+        } else {
+            feedback.textContent = "Toque perto da bolinha do Cauã para começar a desenhar!";
+            feedback.className = "FeedbackMiniGame erro";
+        }
+    });
+
+    canvas.addEventListener("pointermove", (e) => {
+        if (!desenhando || animando) return;
+        const pt = obterPosicaoToque(e);
+
+        const carteiraHit = colidiuCarteira(pt);
+        if (carteiraHit) {
+            desenhando = false;
+            carteiraHit.erro = true;
+            desenharMapa();
+            feedback.textContent = "Ops! Encostou na carteira. Tente contornar pelo corredor!";
+            feedback.className = "FeedbackMiniGame erro";
+            setTimeout(() => resetarTrajeto("Desenhe novamente a partir do Cauã."), 900);
+            return;
+        }
+
+        const ultimo = pontosTrajeto[pontosTrajeto.length - 1];
+        if (!ultimo || Math.hypot(pt.x - ultimo.x, pt.y - ultimo.y) >= 6) {
+            pontosTrajeto.push(pt);
+            desenharMapa();
+        }
+
+        if (chegouNaPorta(pt)) {
+            desenhando = false;
+            animarCaminhada();
+        }
+    });
+
+    canvas.addEventListener("pointerup", () => {
+        if (!desenhando || animando) return;
+        desenhando = false;
+        const ultimo = pontosTrajeto[pontosTrajeto.length - 1];
+        if (ultimo && !chegouNaPorta(ultimo)) {
+            feedback.textContent = "O traço parou antes da porta! Tente levar até o retângulo verde.";
+            feedback.className = "FeedbackMiniGame erro";
+        }
+    });
+
+    document.getElementById("btnLimparTrajeto").addEventListener("click", () => {
+        resetarTrajeto("Trajeto limpo! Comece a partir do Cauã.");
+    });
+
+    desenharMapa();
+}
+
+/* =========================================
+   MINI-GAME 2: OSANA (DESENROLAR CORDAS)
+   ========================================= */
+function MontarMiniGameOsana() {
+    const titulo = document.getElementById("tituloMiniGame");
+    const badge = document.getElementById("badgeProgressoMiniGame");
+    const instrucao = document.getElementById("instrucaoMiniGame");
+    const conteudo = document.getElementById("conteudoMiniGame");
+    const feedback = document.getElementById("feedbackMiniGame");
+
+    titulo.textContent = "Desenrole as Cordas da Roda";
+    badge.textContent = "0 / 5 Cordas";
+    instrucao.innerHTML = `Arraste cada corda para fora da roda (ou toque nos nós coloridos) para liberar a cadeira da <strong>Osana</strong>!`;
+
+    conteudo.innerHTML = `<canvas id="canvasOsana" width="560" height="420" class="CanvasMiniGame"></canvas>`;
+
+    const canvas = document.getElementById("canvasOsana");
+    const ctx = canvas.getContext("2d");
+
+    const centro = { x: 280, y: 215 };
+    const raioRoda = 148;
+    let anguloRoda = 0;
+    let concluido = false;
+
+    const cordas = [
+        { id: 1, cor: "#ef4444", angulo: -0.6,  nx: 215, ny: 135, puxada: 0, removida: false },
+        { id: 2, cor: "#f59e0b", angulo: 0.5,   nx: 355, ny: 145, puxada: 0, removida: false },
+        { id: 3, cor: "#ec4899", angulo: 1.5,   nx: 375, ny: 265, puxada: 0, removida: false },
+        { id: 4, cor: "#38bdf8", angulo: 2.5,   nx: 245, ny: 315, puxada: 0, removida: false },
+        { id: 5, cor: "#a855f7", angulo: -2.1,  nx: 175, ny: 225, puxada: 0, removida: false }
+    ];
+
+    let cordaAtiva = null;
+    let inicioArrasto = { x: 0, y: 0 };
+
+    function desenharRoda() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Fundo suave
+        ctx.fillStyle = "#0f172a";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.save();
+        ctx.translate(centro.x, centro.y);
+        ctx.rotate(anguloRoda);
+
+        // Pneu externo
+        ctx.strokeStyle = "#334155";
+        ctx.lineWidth = 22;
+        ctx.beginPath();
+        ctx.arc(0, 0, raioRoda, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Aro colorido (estilo Osana)
+        ctx.strokeStyle = "#2dd4bf";
+        ctx.lineWidth = 8;
+        ctx.beginPath();
+        ctx.arc(0, 0, raioRoda - 14, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Raios metálicos
+        ctx.strokeStyle = "#cbd5e1";
+        ctx.lineWidth = 4;
+        for (let i = 0; i < 12; i++) {
+            const a = (i * Math.PI) / 6;
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(Math.cos(a) * (raioRoda - 16), Math.sin(a) * (raioRoda - 16));
+            ctx.stroke();
+        }
+
+        // Cubo central
+        ctx.fillStyle = "#9333ea";
+        ctx.beginPath();
+        ctx.arc(0, 0, 26, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        ctx.restore();
+
+        // Desenha as cordas emaranhadas restantes
+        cordas.forEach((c) => {
+            if (c.removida) return;
+
+            const offsetX = Math.cos(c.angulo) * c.puxada;
+            const offsetY = Math.sin(c.angulo) * c.puxada;
+            const noAtualX = c.nx + offsetX;
+            const noAtualY = c.ny + offsetY;
+
+            // Corda enrolada do eixo até a borda
+            ctx.save();
+            ctx.strokeStyle = c.cor;
+            ctx.lineWidth = 11;
+            ctx.lineCap = "round";
+            ctx.beginPath();
+            ctx.moveTo(centro.x, centro.y);
+            ctx.quadraticCurveTo(
+                (centro.x + noAtualX) / 2 + 28,
+                (centro.y + noAtualY) / 2 - 28,
+                noAtualX,
+                noAtualY
+            );
+            ctx.lineTo(noAtualX + Math.cos(c.angulo) * 42, noAtualY + Math.sin(c.angulo) * 42);
+            ctx.stroke();
+
+            // Nó / Alça de toque
+            ctx.fillStyle = c.cor;
+            ctx.beginPath();
+            ctx.arc(noAtualX, noAtualY, 22, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "800 16px Inter, sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillText(c.id, noAtualX, noAtualY + 6);
+            ctx.restore();
+        });
+    }
+
+    function obterPosicao(e) {
+        const rect = canvas.getBoundingClientRect();
+        return {
+            x: (e.clientX - rect.left) * (canvas.width / rect.width),
+            y: (e.clientY - rect.top) * (canvas.height / rect.height)
+        };
+    }
+
+    function removerCorda(c) {
+        if (c.removida) return;
+        c.removida = true;
+        const removidas = cordas.filter((item) => item.removida).length;
+        badge.textContent = `${removidas} / 5 Cordas`;
+        feedback.textContent = `Corda ${c.id} desenrolada! (${removidas} de 5)`;
+        feedback.className = "FeedbackMiniGame sucesso";
+        desenharRoda();
+
+        if (removidas === cordas.length && !concluido) {
+            concluido = true;
+            feedback.textContent = "Roda totalmente livre! A Osana já pode se mover!";
+            let giros = 0;
+            function girarRodaLivre() {
+                anguloRoda += 0.14;
+                giros++;
+                desenharRoda();
+                if (giros < 38) {
+                    requestAnimationFrame(girarRodaLivre);
+                } else {
+                    ConcluirMiniGame("Osana");
+                }
+            }
+            requestAnimationFrame(girarRodaLivre);
+        }
+    }
+
+    canvas.addEventListener("pointerdown", (e) => {
+        if (concluido) return;
+        canvas.setPointerCapture(e.pointerId);
+        const pt = obterPosicao(e);
+
+        for (let i = cordas.length - 1; i >= 0; i--) {
+            const c = cordas[i];
+            if (c.removida) continue;
+            if (Math.hypot(pt.x - c.nx, pt.y - c.ny) <= 42) {
+                cordaAtiva = c;
+                inicioArrasto = pt;
+                break;
+            }
+        }
+    });
+
+    canvas.addEventListener("pointermove", (e) => {
+        if (!cordaAtiva || concluido) return;
+        const pt = obterPosicao(e);
+        const dist = Math.hypot(pt.x - inicioArrasto.x, pt.y - inicioArrasto.y);
+        cordaAtiva.puxada = Math.min(70, dist);
+        desenharRoda();
+
+        if (dist >= 55) {
+            const alvo = cordaAtiva;
+            cordaAtiva = null;
+            removerCorda(alvo);
+        }
+    });
+
+    canvas.addEventListener("pointerup", () => {
+        if (!cordaAtiva || concluido) return;
+        // Se o jogador deu um toque rápido no nó, também solta a corda para facilitar no totem
+        const alvo = cordaAtiva;
+        cordaAtiva = null;
+        removerCorda(alvo);
+    });
+
+    desenharRoda();
+}
+
+/* =========================================
+   MINI-GAME 3: RAMIREZ (ESCOLHER SINAL DE MÃO)
+   ========================================= */
+function MontarMiniGameRamirez() {
+    const titulo = document.getElementById("tituloMiniGame");
+    const badge = document.getElementById("badgeProgressoMiniGame");
+    const instrucao = document.getElementById("instrucaoMiniGame");
+    const conteudo = document.getElementById("conteudoMiniGame");
+    const feedback = document.getElementById("feedbackMiniGame");
+
+    titulo.textContent = "Comunique-se com Sinais";
+
+    const etapas = [
+        {
+            progresso: "Etapa 1 / 2",
+            pergunta: "Você tocou no ombro do Ramirez e ele olhou para você. Qual sinal de mão você faz primeiro para cumprimentá-lo?",
+            opcoes: [
+                {
+                    texto: "Acenar com a mão aberta sorrindo (Oi / Tudo bem?)",
+                    correta: true,
+                    dica: "Perfeito! Um aceno claro e acolhedor inicia bem a conversa.",
+                    svg: `<svg viewBox="0 0 120 120">
+                            <circle cx="60" cy="60" r="52" fill="#dbeafe"/>
+                            <path d="M42 78 V42 a6 6 0 0 1 12 0 v20 V34 a6 6 0 0 1 12 0 v28 V38 a6 6 0 0 1 12 0 v26 V48 a6 6 0 0 1 11 0 v28 c0 16-11 26-26 26 H52 c-10 0-17-7-19-16 l-5-16 a6 6 0 0 1 11-4 l3 12z" fill="#fbbf24" stroke="#1e293b" stroke-width="4" stroke-linejoin="round"/>
+                            <path d="M22 36 Q16 48 22 60 M98 36 Q104 48 98 60" fill="none" stroke="#2563eb" stroke-width="4" stroke-linecap="round"/>
+                          </svg>`
+                },
+                {
+                    texto: "Apontar o dedo indicador na cara dele",
+                    correta: false,
+                    dica: "Apontar o dedo diretamente no rosto pode parecer agressivo. Tente outro sinal!",
+                    svg: `<svg viewBox="0 0 120 120">
+                            <circle cx="60" cy="60" r="52" fill="#fee2e2"/>
+                            <path d="M52 65 V26 a7 7 0 0 1 14 0 v39 h14 a8 8 0 0 1 8 8 v14 c0 13-10 21-24 21 H52 c-12 0-20-8-20-20 V72 a8 8 0 0 1 8-8 z" fill="#f87171" stroke="#1e293b" stroke-width="4"/>
+                          </svg>`
+                },
+                {
+                    texto: "Fazer sinal de 'Pare' com a mão rígida",
+                    correta: false,
+                    dica: "Esse gesto indica para ele parar, não é um cumprimento. Tente novamente!",
+                    svg: `<svg viewBox="0 0 120 120">
+                            <circle cx="60" cy="60" r="52" fill="#fef3c7"/>
+                            <rect x="38" y="34" width="44" height="54" rx="14" fill="#fb923c" stroke="#1e293b" stroke-width="4"/>
+                            <line x1="30" y1="30" x2="90" y2="90" stroke="#dc2626" stroke-width="6" stroke-linecap="round"/>
+                          </svg>`
+                }
+            ]
+        },
+        {
+            progresso: "Etapa 2 / 2",
+            pergunta: "Ótimo! Agora o Ramirez está atento. Qual gesto você faz para avisar que é hora do recreio e convidá-lo para sair?",
+            opcoes: [
+                {
+                    texto: "Mãos juntas ao lado do rosto (Sinal de Dormir)",
+                    correta: false,
+                    dica: "Esse sinal significa dormir/descansar, não hora do recreio!",
+                    svg: `<svg viewBox="0 0 120 120">
+                            <circle cx="60" cy="60" r="52" fill="#e0e7ff"/>
+                            <path d="M44 42 c10-8 24-4 30 8 l8 24 c3 9-3 18-12 20 l-16 3 c-9 2-18-4-20-13 l-6-22 c-2-9 5-16 16-20z" fill="#a5b4fc" stroke="#1e293b" stroke-width="4"/>
+                            <text x="76" y="38" font-size="18" font-weight="800" fill="#312e81">Zzz</text>
+                          </svg>`
+                },
+                {
+                    texto: "Sinal de 'Vamos / Recreio' (chamar para frente e apontar a porta)",
+                    correta: true,
+                    dica: "Excelente! O Ramirez entendeu perfeitamente o convite para o recreio!",
+                    svg: `<svg viewBox="0 0 120 120">
+                            <circle cx="60" cy="60" r="52" fill="#dcfce7"/>
+                            <path d="M32 72 c0-14 10-24 24-24 h22 l-8-10 a6 6 0 0 1 9-8 l20 22 a6 6 0 0 1 0 8 L79 82 a6 6 0 0 1-9-8 l8-10 H56 c-6 0-10 4-10 10 v14 a7 7 0 0 1-14 0 z" fill="#4ade80" stroke="#14532d" stroke-width="4" stroke-linejoin="round"/>
+                          </svg>`
+                },
+                {
+                    texto: "Polegar para baixo (Sinal de Negativo)",
+                    correta: false,
+                    dica: "Polegar para baixo significa 'não'. Escolha o sinal que convida para o recreio!",
+                    svg: `<svg viewBox="0 0 120 120">
+                            <circle cx="60" cy="60" r="52" fill="#fee2e2"/>
+                            <path d="M54 56 v34 a7 7 0 0 0 14 0 V56 h12 a8 8 0 0 0 8-8 V34 c0-12-10-20-23-20 H52 c-11 0-19 8-19 19 v15 a8 8 0 0 0 8 8 z" fill="#f87171" stroke="#1e293b" stroke-width="4"/>
+                          </svg>`
+                }
+            ]
+        }
+    ];
+
+    let etapaAtual = 0;
+    let bloqueado = false;
+
+    function renderizarEtapa() {
+        const dados = etapas[etapaAtual];
+        bloqueado = false;
+        badge.textContent = dados.progresso;
+        instrucao.textContent = dados.pergunta;
+        feedback.textContent = "";
+        feedback.className = "FeedbackMiniGame";
+
+        conteudo.innerHTML = `
+            <div class="GradeSinais">
+                ${dados.opcoes
+                    .map(
+                        (op, idx) => `
+                    <button type="button" class="CardSinal" data-indice="${idx}">
+                        ${op.svg}
+                        <span class="TituloCardSinal">${op.texto}</span>
+                    </button>
+                `
+                    )
+                    .join("")}
+            </div>
+        `;
+
+        conteudo.querySelectorAll(".CardSinal").forEach((card) => {
+            card.addEventListener("click", () => {
+                if (bloqueado) return;
+                const idx = Number(card.getAttribute("data-indice"));
+                const opcao = dados.opcoes[idx];
+
+                if (opcao.correta) {
+                    bloqueado = true;
+                    card.classList.add("correto");
+                    feedback.textContent = opcao.dica;
+                    feedback.className = "FeedbackMiniGame sucesso";
+
+                    setTimeout(() => {
+                        etapaAtual++;
+                        if (etapaAtual < etapas.length) {
+                            renderizarEtapa();
+                        } else {
+                            ConcluirMiniGame("Ramirez");
+                        }
+                    }, 950);
+                } else {
+                    card.classList.remove("errado");
+                    void card.offsetWidth; // Reinicia animação
+                    card.classList.add("errado");
+                    feedback.textContent = opcao.dica;
+                    feedback.className = "FeedbackMiniGame erro";
+                }
+            });
+        });
+    }
+
+    renderizarEtapa();
+}
+
+/* =========================================
+   PONTUAÇÃO E FINALIZAÇÃO
+   ========================================= */
 function AtualizarPontos() {
     PontosTotais = Number(PontosTotais) + VariacaoPontos;
     VariacaoPontos = 0;
@@ -432,10 +1102,8 @@ function FinalizarJogo() {
         pontos: PontosTotais
     });
 
-    // Ordena do maior para o menor e mantém os 3 melhores
     rankingSalvo.sort((a, b) => b.pontos - a.pontos);
     localStorage.setItem("rankingAcademia", JSON.stringify(rankingSalvo.slice(0, 3)));
 
-    // Volta para a tela inicial para o próximo participante do totem
     window.location.href = "index.html";
 }

@@ -1,13 +1,29 @@
 let VariacaoPontos = 0;
 let PontosTotais = 0;
 let HeroiSelecionado = "";
+let TempoInicioResposta = 0;
 let acaoAoFecharBalao = null;
 
-const personagens = ["Caua", "Osana", "Ramirez"];
+const personagens = ["Caua", "Osana", "Ramirez", "Miqueias", "Maya"];
+const personagensPontuaveis = ["Caua", "Osana", "Ramirez"];
+
 const personagensRespondidos = {
     Caua: false,
     Osana: false,
-    Ramirez: false
+    Ramirez: false,
+    Miqueias: false,
+    Maya: false
+};
+
+const bonusVelocidadePorPersonagem = {
+    Caua: 0,
+    Osana: 0,
+    Ramirez: 0
+};
+
+const etapaDialogoSimples = {
+    Miqueias: 1,
+    Maya: 1
 };
 
 /* =========================================
@@ -62,59 +78,77 @@ function FecharBalaoAviso(confirmado = true) {
 /* =========================================
    TELAS INTERMEDIÁRIAS DE CARREGAMENTO
    ========================================= */
-function ControlarCarregamentoPagina(idTela, idBarra, imagensExtras = []) {
+function ControlarCarregamentoPagina(idTela, idBarra, imagensExtras = [], duracaoMinimaMs = 450, idPorcentagem = null) {
     const tela = document.getElementById(idTela);
     const barra = document.getElementById(idBarra);
+    const textoPct = idPorcentagem ? document.getElementById(idPorcentagem) : null;
     if (!tela) return;
 
     const imgsDOM = Array.from(document.querySelectorAll("img"));
     const totalRecursos = imgsDOM.length + imagensExtras.length + 1;
+    const inicioCarregamento = Date.now();
     let carregados = 0;
     let finalizado = false;
+    let progressoVisual = 0;
 
-    function atualizarProgresso() {
-        carregados++;
-        const pct = Math.min(100, Math.round((carregados / totalRecursos) * 100));
-        if (barra) {
-            barra.style.width = pct + "%";
+    function atualizarInterface(pct) {
+        if (barra) barra.style.width = pct + "%";
+        if (textoPct) textoPct.textContent = pct + "%";
+    }
+
+    const intervaloAnimacao = setInterval(() => {
+        const pctReal = Math.min(100, Math.round((carregados / totalRecursos) * 100));
+        const tempoPassado = Date.now() - inicioCarregamento;
+        const pctTempo = Math.min(100, Math.round((tempoPassado / duracaoMinimaMs) * 100));
+        const alvo = Math.min(pctReal, pctTempo);
+
+        if (progressoVisual < alvo) {
+            progressoVisual = Math.min(alvo, progressoVisual + 8);
+            atualizarInterface(progressoVisual);
         }
-        if (carregados >= totalRecursos) {
+
+        if (carregados >= totalRecursos && tempoPassado >= duracaoMinimaMs) {
             concluirCarregamento();
         }
+    }, 50);
+
+    function registrarRecursoCarregado() {
+        carregados++;
     }
 
     function concluirCarregamento() {
         if (finalizado) return;
         finalizado = true;
-        if (barra) barra.style.width = "100%";
+        clearInterval(intervaloAnimacao);
+        atualizarInterface(100);
         setTimeout(() => {
             tela.classList.add("oculta");
-        }, 350);
+        }, 300);
     }
 
     imgsDOM.forEach((img) => {
         if (img.complete) {
-            atualizarProgresso();
+            registrarRecursoCarregado();
         } else {
-            img.addEventListener("load", atualizarProgresso, { once: true });
-            img.addEventListener("error", atualizarProgresso, { once: true });
+            img.addEventListener("load", registrarRecursoCarregado, { once: true });
+            img.addEventListener("error", registrarRecursoCarregado, { once: true });
         }
     });
 
     imagensExtras.forEach((src) => {
         const preImg = new Image();
-        preImg.onload = atualizarProgresso;
-        preImg.onerror = atualizarProgresso;
+        preImg.onload = registrarRecursoCarregado;
+        preImg.onerror = registrarRecursoCarregado;
         preImg.src = src;
     });
 
     if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(atualizarProgresso).catch(atualizarProgresso);
+        document.fonts.ready.then(registrarRecursoCarregado).catch(registrarRecursoCarregado);
     } else {
-        atualizarProgresso();
+        registrarRecursoCarregado();
     }
 
-    setTimeout(concluirCarregamento, 3500);
+    setTimeout(concluirCarregamento, Math.max(3500, duracaoMinimaMs + 1500));
 }
 
 /* =========================================
@@ -122,7 +156,13 @@ function ControlarCarregamentoPagina(idTela, idBarra, imagensExtras = []) {
    ========================================= */
 document.addEventListener("DOMContentLoaded", () => {
     if (document.getElementById("telaCarregamentoInicial")) {
-        ControlarCarregamentoPagina("telaCarregamentoInicial", "barraProgressoInicial");
+        ControlarCarregamentoPagina(
+            "telaCarregamentoInicial",
+            "barraProgressoInicial",
+            ["saladeAula.png", "CauaInicial.png", "Osana.png", "Ramirez.png", "Miqueias.png", "Maya.png"],
+            1200,
+            "porcentagemLoaderInicial"
+        );
     }
 
     if (document.getElementById("top1")) {
@@ -130,7 +170,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (document.getElementById("telaCarregamentoSala")) {
-        ControlarCarregamentoPagina("telaCarregamentoSala", "barraProgressoSala", ["saladeAula.png"]);
+        ControlarCarregamentoPagina(
+            "telaCarregamentoSala",
+            "barraProgressoSala",
+            ["saladeAula.png", "Miqueias.png", "Maya.png"],
+            600
+        );
     }
 
     const hudJogador = document.getElementById("hudJogador");
@@ -225,7 +270,7 @@ function IniciarTransicaoParaSala(nomeJogador, heroi) {
 
     telaTransicao.classList.remove("oculta");
 
-    const assetsSala = ["saladeAula.png", "CauaInicial.png", "Osana.png", "Ramirez.png"];
+    const assetsSala = ["saladeAula.png", "CauaInicial.png", "Osana.png", "Ramirez.png", "Miqueias.png", "Maya.png"];
     let carregados = 0;
     let redirecionado = false;
 
@@ -279,6 +324,8 @@ function PreencherFalasPersonagens(heroi) {
     const falaCaua = document.getElementById("falaCaua");
     const falaOsana = document.getElementById("falaOsana");
     const falaRamirez = document.getElementById("falaRamirez");
+    const falaMiqueias = document.getElementById("falaMiqueias");
+    const falaMaya = document.getElementById("falaMaya");
 
     if (falaCaua) {
         falaCaua.innerHTML = `"E aí, <span class="DestaqueHeroi">${heroi}</span>! Tudo tranquilo? O sinal do recreio já bateu, mas estou com receio de esbarrar nas carteiras. Pode me guiar até a porta?"`;
@@ -291,22 +338,138 @@ function PreencherFalasPersonagens(heroi) {
     if (falaRamirez) {
         falaRamirez.innerHTML = `"Hmm... parece que todo mundo já saiu e eu nem ouvi o sinal bater! Ei, <span class="DestaqueHeroi">${heroi}</span>, você ainda está na sala?"`;
     }
+
+    if (falaMiqueias) {
+        falaMiqueias.innerHTML = `"Opa, <span class="DestaqueHeroi">${heroi}</span>! Nem vi o tempo passar aqui mexendo no celular..."`;
+    }
+
+    if (falaMaya) {
+        falaMaya.innerHTML = `"Ah, oi <span class="DestaqueHeroi">${heroi}</span>! Esse capítulo do livro está tão interessante que nem notei a sala esvaziando..."`;
+    }
 }
 
-function ObterReacaoPersonagem(nomePersonagem, pontos, heroi) {
+function MontarDialogoSimples(nomePersonagem, etapa) {
+    const heroi = localStorage.getItem("jogadorHeroi") || "Milly";
+    const falaEl = document.getElementById("fala" + nomePersonagem);
+    const instrucaoEl = document.getElementById("instrucaoMenu" + nomePersonagem);
+    const opcoesEl = document.getElementById("opcoes" + nomePersonagem);
+
+    if (!falaEl || !instrucaoEl || !opcoesEl) return;
+
+    etapaDialogoSimples[nomePersonagem] = etapa;
+
+    const roteirosSimples = {
+        Miqueias: {
+            1: {
+                fala: `"Opa, <span class="DestaqueHeroi">${heroi}</span>! Nem vi o tempo passar aqui mexendo no celular..."`,
+                instrucao: "O que você pergunta?",
+                opcoes: [
+                    "O sinal já bateu! Por que você ainda está na sala mexendo no celular?",
+                    "Ei Miqueias, não vai descer para o recreio? O que você está fazendo aí?"
+                ]
+            },
+            2: {
+                fala: `"É que eu estava tentando passar de fase neste jogo aqui e perdi a hora! Valeu por avisar, <span class="DestaqueHeroi">${heroi}</span>, já vou guardar o celular."`,
+                instrucao: "Despeça-se do colega:",
+                opcoes: [
+                    "Beleza então! Até mais tarde no intervalo, Miqueias!",
+                    "Sem problemas! Bom descanso, a gente se vê depois!"
+                ]
+            }
+        },
+        Maya: {
+            1: {
+                fala: `"Ah, oi <span class="DestaqueHeroi">${heroi}</span>! Esse capítulo do livro está tão interessante que nem notei a sala esvaziando..."`,
+                instrucao: "O que você pergunta?",
+                opcoes: [
+                    "O sinal do recreio já tocou! Por que você ainda está na sala?",
+                    "Ei Maya, esse livro deve estar bom mesmo! Por que não saiu para o intervalo ainda?"
+                ]
+            },
+            2: {
+                fala: `"Faltavam só duas páginas para eu terminar esse capítulo de aventura! Obrigada por me lembrar, <span class="DestaqueHeroi">${heroi}</span>, já estou indo!"`,
+                instrucao: "Despeça-se da colega:",
+                opcoes: [
+                    "Combinado! Boa leitura e até mais, Maya!",
+                    "Até daqui a pouco no intervalo, Maya! Tchau!"
+                ]
+            }
+        }
+    };
+
+    const dadosEtapa = roteirosSimples[nomePersonagem]?.[etapa];
+    if (!dadosEtapa) return;
+
+    falaEl.innerHTML = dadosEtapa.fala;
+    instrucaoEl.textContent = dadosEtapa.instrucao;
+    opcoesEl.innerHTML = dadosEtapa.opcoes
+        .map(
+            (textoOpcao) => `
+            <button type="button" onclick="AvancarDialogoSimples('${nomePersonagem}', ${etapa})" class="BalaodeFalaNormal">
+                ${textoOpcao}
+            </button>
+        `
+        )
+        .join("");
+}
+
+function AvancarDialogoSimples(nomePersonagem, etapaAtual) {
+    if (personagensRespondidos[nomePersonagem]) return;
+
+    if (etapaAtual === 1) {
+        MontarDialogoSimples(nomePersonagem, 2);
+        return;
+    }
+
+    // Etapa 2: Despedida concluída (sem contar pontos)
+    FecharDialogo();
+    personagensRespondidos[nomePersonagem] = true;
+
+    const botaoPersonagem = document.getElementById(nomePersonagem);
+    if (botaoPersonagem) {
+        botaoPersonagem.classList.add("respondido");
+    }
+
+    const heroi = localStorage.getItem("jogadorHeroi") || "Milly";
+    const despedidas = {
+        Miqueias: `<strong>Miqueias:</strong> "Valeu pelo toque, <span class="DestaqueHeroi">${heroi}</span>! Até mais!"`,
+        Maya: `<strong>Maya:</strong> "Obrigada, <span class="DestaqueHeroi">${heroi}</span>! Até mais tarde!"`
+    };
+
+    MostrarBalaoAviso(
+        "Até logo!",
+        despedidas[nomePersonagem] || `Até mais, ${heroi}!`,
+        "CONTINUAR"
+    );
+}
+
+function CalcularBonusVelocidade(segundos) {
+    if (segundos <= 4) return 10;
+    if (segundos <= 8) return 7;
+    if (segundos <= 12) return 4;
+    if (segundos <= 18) return 2;
+    return 0;
+}
+
+function ObterReacaoPersonagem(nomePersonagem, pontos, heroi, bonusVelocidade = 0) {
+    const textoBonus =
+        bonusVelocidade > 0
+            ? ` (+20 pts + ${bonusVelocidade} pts bônus de velocidade!)<br><span class="DestaqueVelocidade">⚡ Resposta rápida: +${bonusVelocidade} pts extras!</span>`
+            : ` (+20 pts com bônus de ajuda!)`;
+
     const reacoes = {
         Caua: {
-            10: `<strong>Cauã:</strong> "Valeu mesmo, <span class="DestaqueHeroi">${heroi}</span>! Me guiar desviando das carteiras com calma faz toda a diferença!" (+20 pts com bônus de ajuda!)`,
+            10: `<strong>Cauã:</strong> "Valeu mesmo, <span class="DestaqueHeroi">${heroi}</span>! Me guiar desviando das carteiras com calma faz toda a diferença!"${textoBonus}`,
             "-5": `<strong>Cauã:</strong> "Ah, tudo bem, <span class="DestaqueHeroi">${heroi}</span>... vou tentar ir bem devagar com a minha bengala." (-5 pts)`,
             "-10": `<strong>Cauã:</strong> "Poxa, <span class="DestaqueHeroi">${heroi}</span>... não precisava responder assim, eu só pedi uma ajuda." (-10 pts)`
         },
         Osana: {
-            10: `<strong>Osana:</strong> "Muito obrigada, <span class="DestaqueHeroi">${heroi}</span>! Perguntar antes e desenrolar as cordas da roda respeita minha autonomia!" (+20 pts com bônus de ajuda!)`,
+            10: `<strong>Osana:</strong> "Muito obrigada, <span class="DestaqueHeroi">${heroi}</span>! Perguntar antes e desenrolar as cordas da roda respeita minha autonomia!"${textoBonus}`,
             "-5": `<strong>Osana:</strong> "Ei, <span class="DestaqueHeroi">${heroi}</span>! Nunca empurre a cadeira de rodas sem pedir antes, isso pode me desequilibrar!" (-5 pts)`,
             "-10": `<strong>Osana:</strong> "Que chato ouvir isso, <span class="DestaqueHeroi">${heroi}</span>... eu tenho tanto direito de ir ao recreio quanto qualquer colega." (-10 pts)`
         },
         Ramirez: {
-            10: `<strong>Ramirez:</strong> "Obrigado por tocar no meu ombro e fazer os sinais de frente, <span class="DestaqueHeroi">${heroi}</span>! Entendi direitinho que já é hora do recreio!" (+20 pts com bônus de ajuda!)`,
+            10: `<strong>Ramirez:</strong> "Obrigado por tocar no meu ombro e fazer os sinais de frente, <span class="DestaqueHeroi">${heroi}</span>! Entendi direitinho que já é hora do recreio!"${textoBonus}`,
             "-5": `<strong>Ramirez:</strong> "Ai! Gritar de costas não ajuda a me fazer ouvir, <span class="DestaqueHeroi">${heroi}</span>... o ideal é falar de frente!" (-5 pts)`,
             "-10": `<strong>Ramirez:</strong> "Que pena, <span class="DestaqueHeroi">${heroi}</span>... incluir é justamente buscar formas de conversar com todos." (-10 pts)`
         }
@@ -328,6 +491,12 @@ function AbrirDialogo(nomePersonagem) {
 
     const heroi = localStorage.getItem("jogadorHeroi") || "Milly";
     PreencherFalasPersonagens(heroi);
+
+    if (nomePersonagem === "Miqueias" || nomePersonagem === "Maya") {
+        MontarDialogoSimples(nomePersonagem, 1);
+    } else {
+        TempoInicioResposta = Date.now();
+    }
 
     const overlay = document.getElementById("overlayFoco");
     const setor = document.getElementById("setor" + nomePersonagem);
@@ -358,11 +527,14 @@ function FecharDialogo() {
 function Responder(nomePersonagem, pontos) {
     if (personagensRespondidos[nomePersonagem]) return;
 
+    const tempoDecorrido = (Date.now() - TempoInicioResposta) / 1000;
     FecharDialogo();
 
-    // Se o jogador decidiu ajudar (pontos > 0), abre o mini-game específico do personagem!
+    // Se o jogador decidiu ajudar (pontos > 0), calcula bônus de velocidade e abre o mini-game!
     if (pontos > 0) {
-        VariacaoPontos = pontos;
+        const bonusVelocidade = CalcularBonusVelocidade(tempoDecorrido);
+        bonusVelocidadePorPersonagem[nomePersonagem] = bonusVelocidade;
+        VariacaoPontos = pontos + bonusVelocidade;
         AtualizarPontos();
         IniciarMiniGame(nomePersonagem);
         return;
@@ -377,13 +549,13 @@ function Responder(nomePersonagem, pontos) {
 
     VariacaoPontos = pontos;
     AtualizarPontos();
-    ExibirConclusaoInteracao(nomePersonagem, pontos);
+    ExibirConclusaoInteracao(nomePersonagem, pontos, 0);
 }
 
-function ExibirConclusaoInteracao(nomePersonagem, pontosBase) {
+function ExibirConclusaoInteracao(nomePersonagem, pontosBase, bonusVelocidade = 0) {
     const heroi = localStorage.getItem("jogadorHeroi") || "Milly";
-    const mensagemReacao = ObterReacaoPersonagem(nomePersonagem, pontosBase, heroi);
-    const todosRespondidos = personagens.every((nome) => personagensRespondidos[nome]);
+    const mensagemReacao = ObterReacaoPersonagem(nomePersonagem, pontosBase, heroi, bonusVelocidade);
+    const todosRespondidos = personagensPontuaveis.every((nome) => personagensRespondidos[nome]);
 
     MostrarBalaoAviso(
         pontosBase > 0 ? "Ajuda Concluída!" : "Atenção na inclusão!",
@@ -393,7 +565,7 @@ function ExibirConclusaoInteracao(nomePersonagem, pontosBase) {
             if (todosRespondidos) {
                 MostrarBalaoAviso(
                     "Rodada Concluída!",
-                    `Parabéns, <strong>${heroi}</strong>! Você conversou com todos os colegas da sala.<br><br>Pontuação final: <strong>${PontosTotais} pts</strong>.`,
+                    `Parabéns, <strong>${heroi}</strong>! Você ajudou todos os colegas da sala.<br><br>Pontuação final: <strong>${PontosTotais} pts</strong>.`,
                     "SALVAR NO RANKING",
                     () => FinalizarJogo()
                 );
@@ -447,7 +619,8 @@ function ConcluirMiniGame(nomePersonagem) {
     VariacaoPontos = 10;
     AtualizarPontos();
 
-    ExibirConclusaoInteracao(nomePersonagem, 10);
+    const bonusVelocidade = bonusVelocidadePorPersonagem[nomePersonagem] || 0;
+    ExibirConclusaoInteracao(nomePersonagem, 10, bonusVelocidade);
 }
 
 /* =========================================
@@ -490,11 +663,9 @@ function MontarMiniGameCaua() {
     function desenharMapa() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Piso da sala
         ctx.fillStyle = "#cbd5e1";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Grade sutil do piso
         ctx.strokeStyle = "rgba(15, 23, 42, 0.08)";
         ctx.lineWidth = 1;
         for (let x = 0; x < canvas.width; x += 40) {
@@ -510,12 +681,10 @@ function MontarMiniGameCaua() {
             ctx.stroke();
         }
 
-        // Paredes externas
         ctx.strokeStyle = "#1e293b";
         ctx.lineWidth = 12;
         ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
-        // Porta de saída (verde destaque)
         ctx.fillStyle = "#22c55e";
         ctx.fillRect(porta.x, porta.y, porta.w, porta.h);
         ctx.strokeStyle = "#14532d";
@@ -527,13 +696,10 @@ function MontarMiniGameCaua() {
         ctx.textAlign = "center";
         ctx.fillText("PORTA ▲", porta.x + porta.w / 2, 27);
 
-        // Carteiras / Cadeiras (quadradinhos)
         carteiras.forEach((c) => {
-            // Encosto da cadeira
             ctx.fillStyle = c.erro ? "#991b1b" : "#78350f";
             ctx.fillRect(c.x + 14, c.y + c.h - 4, c.w - 28, 12);
 
-            // Mesa
             ctx.fillStyle = c.erro ? "#ef4444" : "#b45309";
             ctx.beginPath();
             ctx.roundRect(c.x, c.y, c.w, c.h, 8);
@@ -548,7 +714,6 @@ function MontarMiniGameCaua() {
             ctx.fillText("Carteira", c.x + c.w / 2, c.y + c.h / 2 + 5);
         });
 
-        // Linha do trajeto desenhado
         if (pontosTrajeto.length > 1) {
             ctx.save();
             ctx.strokeStyle = "#f59e0b";
@@ -565,7 +730,6 @@ function MontarMiniGameCaua() {
             ctx.restore();
         }
 
-        // Bolinha do Herói (caminhando ao lado do Cauã)
         ctx.fillStyle = "#ffd166";
         ctx.beginPath();
         ctx.arc(posCaua.x + 34, posCaua.y + 6, 17, 0, Math.PI * 2);
@@ -578,7 +742,6 @@ function MontarMiniGameCaua() {
         ctx.font = "800 12px Inter, sans-serif";
         ctx.fillText(heroi, posCaua.x + 34, posCaua.y + 36);
 
-        // Bolinha do Cauã
         ctx.fillStyle = "#16a34a";
         ctx.beginPath();
         ctx.arc(posCaua.x, posCaua.y, 19, 0, Math.PI * 2);
@@ -759,7 +922,6 @@ function MontarMiniGameOsana() {
     function desenharRoda() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Fundo suave
         ctx.fillStyle = "#0f172a";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -767,21 +929,18 @@ function MontarMiniGameOsana() {
         ctx.translate(centro.x, centro.y);
         ctx.rotate(anguloRoda);
 
-        // Pneu externo
         ctx.strokeStyle = "#334155";
         ctx.lineWidth = 22;
         ctx.beginPath();
         ctx.arc(0, 0, raioRoda, 0, Math.PI * 2);
         ctx.stroke();
 
-        // Aro colorido (estilo Osana)
         ctx.strokeStyle = "#2dd4bf";
         ctx.lineWidth = 8;
         ctx.beginPath();
         ctx.arc(0, 0, raioRoda - 14, 0, Math.PI * 2);
         ctx.stroke();
 
-        // Raios metálicos
         ctx.strokeStyle = "#cbd5e1";
         ctx.lineWidth = 4;
         for (let i = 0; i < 12; i++) {
@@ -792,7 +951,6 @@ function MontarMiniGameOsana() {
             ctx.stroke();
         }
 
-        // Cubo central
         ctx.fillStyle = "#9333ea";
         ctx.beginPath();
         ctx.arc(0, 0, 26, 0, Math.PI * 2);
@@ -803,7 +961,6 @@ function MontarMiniGameOsana() {
 
         ctx.restore();
 
-        // Desenha as cordas emaranhadas restantes
         cordas.forEach((c) => {
             if (c.removida) return;
 
@@ -812,7 +969,6 @@ function MontarMiniGameOsana() {
             const noAtualX = c.nx + offsetX;
             const noAtualY = c.ny + offsetY;
 
-            // Corda enrolada do eixo até a borda
             ctx.save();
             ctx.strokeStyle = c.cor;
             ctx.lineWidth = 11;
@@ -828,7 +984,6 @@ function MontarMiniGameOsana() {
             ctx.lineTo(noAtualX + Math.cos(c.angulo) * 42, noAtualY + Math.sin(c.angulo) * 42);
             ctx.stroke();
 
-            // Nó / Alça de toque
             ctx.fillStyle = c.cor;
             ctx.beginPath();
             ctx.arc(noAtualX, noAtualY, 22, 0, Math.PI * 2);
@@ -912,7 +1067,6 @@ function MontarMiniGameOsana() {
 
     canvas.addEventListener("pointerup", () => {
         if (!cordaAtiva || concluido) return;
-        // Se o jogador deu um toque rápido no nó, também solta a corda para facilitar no totem
         const alvo = cordaAtiva;
         cordaAtiva = null;
         removerCorda(alvo);
@@ -1053,7 +1207,7 @@ function MontarMiniGameRamirez() {
                     }, 950);
                 } else {
                     card.classList.remove("errado");
-                    void card.offsetWidth; // Reinicia animação
+                    void card.offsetWidth;
                     card.classList.add("errado");
                     feedback.textContent = opcao.dica;
                     feedback.className = "FeedbackMiniGame erro";

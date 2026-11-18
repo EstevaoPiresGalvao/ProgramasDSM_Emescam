@@ -87,7 +87,7 @@
                 <p id="falaCaua" class="TextoFalante"></p>
             </div>
 
-            <p class="InstrucaoMenu">Como você responde?</p>
+            <p class="InstrucaoMenu">Como você responde? (Responda rápido para bônus!)</p>
             <button id="11caua" type="button" onclick="Responder('Caua', -5)" class="BalaodeFalaNormal">
                 Desculpa, estou ocupado agora.
             </button>
@@ -112,7 +112,7 @@
                 <p id="falaOsana" class="TextoFalante"></p>
             </div>
 
-            <p class="InstrucaoMenu">Como você responde?</p>
+            <p class="InstrucaoMenu">Como você responde? (Responda rápido para bônus!)</p>
             <button id="11Osana" type="button" onclick="Responder('Osana', -5)" class="BalaodeFalaNormal">
                 Deixa que eu empurro sua cadeira logo! (sem pedir)
             </button>
@@ -137,7 +137,7 @@
                 <p id="falaRamirez" class="TextoFalante"></p>
             </div>
 
-            <p class="InstrucaoMenu">O que você faz?</p>
+            <p class="InstrucaoMenu">O que você faz? (Responda rápido para bônus!)</p>
             <button id="11Ramirez" type="button" onclick="Responder('Ramirez', -5)" class="BalaodeFalaNormal">
                 Gritar bem alto de costas para ele ouvir.
             </button>
@@ -147,6 +147,40 @@
             <button id="13Ramirez" type="button" onclick="Responder('Ramirez', 10)" class="BalaodeFalaNormal">
                 Tocar levemente no ombro dele, olhar de frente e fazer sinais.
             </button>
+        </div>
+    </div>
+
+    <!-- Setor Miqueias (Personagem sem deficiência - mexendo no celular) -->
+    <div id="setorMiqueias" class="PosicaoMiqueias">
+        <button id="Miqueias" type="button" onclick="AbrirDialogo('Miqueias')" class="EstiloMiqueias">
+            <img src="Miqueias.png" alt="Miqueias">
+        </button>
+
+        <div id="menuMiqueias" class="OrganizarBotoes">
+            <div class="BalaoPersonagem">
+                <span class="NomeFalante">Miqueias diz:</span>
+                <p id="falaMiqueias" class="TextoFalante"></p>
+            </div>
+
+            <p id="instrucaoMenuMiqueias" class="InstrucaoMenu">O que você pergunta?</p>
+            <div id="opcoesMiqueias" class="ListaOpcoesSimples"></div>
+        </div>
+    </div>
+
+    <!-- Setor Maya (Personagem sem deficiência - lendo um livro) -->
+    <div id="setorMaya" class="PosicaoMaya">
+        <button id="Maya" type="button" onclick="AbrirDialogo('Maya')" class="EstiloMaya">
+            <img src="Maya.png" alt="Maya">
+        </button>
+
+        <div id="menuMaya" class="OrganizarBotoes">
+            <div class="BalaoPersonagem">
+                <span class="NomeFalante">Maya diz:</span>
+                <p id="falaMaya" class="TextoFalante"></p>
+            </div>
+
+            <p id="instrucaoMenuMaya" class="InstrucaoMenu">O que você pergunta?</p>
+            <div id="opcoesMaya" class="ListaOpcoesSimples"></div>
         </div>
     </div>
     

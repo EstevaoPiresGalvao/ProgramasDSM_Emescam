@@ -148,6 +148,17 @@ body {
     margin: 0 0 24px 0;
 }
 
+.DestaqueVelocidade {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 6px 14px;
+    background-color: rgba(74, 222, 128, 0.18);
+    border: 2px solid #4ade80;
+    border-radius: 10px;
+    color: #4ade80;
+    font-weight: 800;
+}
+
 .AcoesBalaoAviso {
     display: flex;
     gap: 14px;
@@ -265,7 +276,7 @@ body {
     border: 3px solid #ffffff;
     background-color: #1e293b;
     box-shadow: 0 10px 26px rgba(0, 0, 0, 0.6);
-    touch-action: none; /* Impede rolagem ao desenhar ou arrastar no totem */
+    touch-action: none;
     cursor: pointer;
 }
 
@@ -490,6 +501,13 @@ body {
     box-shadow: 0 14px 34px rgba(0, 0, 0, 0.8);
 }
 
+.ListaOpcoesSimples {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
 .BalaoPersonagem {
     background-color: #ffffff;
     color: #111111;
@@ -560,17 +578,19 @@ body {
 }
 
 /* =========================================
-   SETORES DOS PERSONAGENS
+   SETORES DOS PERSONAGENS (TAMANHO MÁXIMO 2.5x)
    ========================================= */
+
+/* Cauã: 255px * 2.5 = 638px */
 .PosicaoCaua {
     position: fixed;
-    bottom: 9%;
-    right: 4%;
+    bottom: 6%;
+    right: 2%;
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
     gap: 20px;
-    z-index: 5;
+    z-index: 6;
 }
 
 .PosicaoCaua.em-destaque {
@@ -578,7 +598,7 @@ body {
 }
 
 .EstiloCaua {
-    width: clamp(185px, 22vw, 255px);
+    width: clamp(230px, 34vw, 638px);
     background: transparent;
     border: none;
     outline: none;
@@ -589,25 +609,28 @@ body {
 
 .EstiloCaua img {
     width: 100%;
+    max-height: 75vh;
     height: auto;
+    object-fit: contain;
     display: block;
     filter: drop-shadow(0px 10px 6px rgba(0, 0, 0, 0.65));
 }
 
 .PosicaoCaua.em-destaque .EstiloCaua img {
     filter: drop-shadow(0px 10px 16px rgba(255, 255, 255, 0.45));
-    transform: scale(1.06);
+    transform: scale(1.04);
 }
 
+/* Osana: 310px * 2.5 = 775px */
 .PosicaoOsana {
     position: fixed;
-    bottom: 8%;
-    left: 4%;
+    bottom: 5%;
+    left: 2%;
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 20px;
-    z-index: 5;
+    z-index: 6;
 }
 
 .PosicaoOsana.em-destaque {
@@ -615,7 +638,7 @@ body {
 }
 
 .EstiloOsana {
-    width: clamp(220px, 27vw, 310px);
+    width: clamp(270px, 40vw, 775px);
     background: transparent;
     border: none;
     outline: none;
@@ -626,25 +649,28 @@ body {
 
 .EstiloOsana img {
     width: 100%;
+    max-height: 75vh;
     height: auto;
+    object-fit: contain;
     display: block;
     filter: drop-shadow(0px 10px 6px rgba(0, 0, 0, 0.65));
 }
 
 .PosicaoOsana.em-destaque .EstiloOsana img {
     filter: drop-shadow(0px 10px 16px rgba(255, 255, 255, 0.45));
-    transform: scale(1.06);
+    transform: scale(1.04);
 }
 
+/* Ramirez: 225px * 2.5 = 563px */
 .PosicaoRamirez {
     position: fixed;
-    bottom: 39%;
-    left: 45%;
+    bottom: 36%;
+    left: 41%;
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 20px;
-    z-index: 5;
+    z-index: 4;
 }
 
 .PosicaoRamirez.em-destaque {
@@ -652,7 +678,7 @@ body {
 }
 
 .EstiloRamirez {
-    width: clamp(155px, 19vw, 225px);
+    width: clamp(195px, 28vw, 563px);
     background: transparent;
     border: none;
     outline: none;
@@ -663,14 +689,96 @@ body {
 
 .EstiloRamirez img {
     width: 100%;
+    max-height: 70vh;
     height: auto;
+    object-fit: contain;
     display: block;
     filter: drop-shadow(0px 8px 5px rgba(0, 0, 0, 0.65));
 }
 
 .PosicaoRamirez.em-destaque .EstiloRamirez img {
     filter: drop-shadow(0px 10px 16px rgba(255, 255, 255, 0.45));
-    transform: scale(1.12);
+    transform: scale(1.08);
+}
+
+/* Miqueias (celular): 240px * 2.5 = 600px */
+.PosicaoMiqueias {
+    position: fixed;
+    bottom: 33%;
+    left: 16%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    z-index: 5;
+}
+
+.PosicaoMiqueias.em-destaque {
+    z-index: 25;
+}
+
+.EstiloMiqueias {
+    width: clamp(210px, 30vw, 600px);
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.EstiloMiqueias img {
+    width: 100%;
+    max-height: 72vh;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0px 10px 6px rgba(0, 0, 0, 0.65));
+}
+
+.PosicaoMiqueias.em-destaque .EstiloMiqueias img {
+    filter: drop-shadow(0px 10px 16px rgba(255, 255, 255, 0.45));
+    transform: scale(1.04);
+}
+
+/* Maya (livro): 240px * 2.5 = 600px */
+.PosicaoMaya {
+    position: fixed;
+    bottom: 33%;
+    right: 16%;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 20px;
+    z-index: 5;
+}
+
+.PosicaoMaya.em-destaque {
+    z-index: 25;
+}
+
+.EstiloMaya {
+    width: clamp(210px, 30vw, 600px);
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.EstiloMaya img {
+    width: 100%;
+    max-height: 72vh;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0px 10px 6px rgba(0, 0, 0, 0.65));
+}
+
+.PosicaoMaya.em-destaque .EstiloMaya img {
+    filter: drop-shadow(0px 10px 16px rgba(255, 255, 255, 0.45));
+    transform: scale(1.04);
 }
 
 @media (orientation: portrait), (max-width: 900px) {
@@ -686,37 +794,63 @@ body {
     }
 
     .PosicaoCaua {
-        right: 3%;
-        bottom: 7%;
+        right: 2%;
+        bottom: 5%;
     }
     .EstiloCaua {
-        width: clamp(180px, 25vw, 265px);
+        width: clamp(220px, 36vw, 663px);
     }
 
     .PosicaoOsana {
-        left: 3%;
-        bottom: 7%;
+        left: 2%;
+        bottom: 5%;
     }
     .EstiloOsana {
-        width: clamp(215px, 30vw, 315px);
+        width: clamp(260px, 42vw, 788px);
     }
 
     .PosicaoRamirez {
-        left: 39%;
-        bottom: 39%;
+        left: 36%;
+        bottom: 38%;
     }
     .EstiloRamirez {
-        width: clamp(150px, 21vw, 225px);
+        width: clamp(185px, 30vw, 563px);
+    }
+
+    .PosicaoMiqueias {
+        left: 10%;
+        bottom: 34%;
+    }
+    .EstiloMiqueias {
+        width: clamp(200px, 32vw, 600px);
+    }
+
+    .PosicaoMaya {
+        right: 10%;
+        bottom: 34%;
+    }
+    .EstiloMaya {
+        width: clamp(200px, 32vw, 600px);
     }
 
     .PosicaoCaua.em-destaque,
     .PosicaoOsana.em-destaque,
-    .PosicaoRamirez.em-destaque {
+    .PosicaoRamirez.em-destaque,
+    .PosicaoMiqueias.em-destaque,
+    .PosicaoMaya.em-destaque {
         left: 50%;
         right: auto;
-        bottom: 5%;
+        bottom: 4%;
         transform: translateX(-50%);
         flex-direction: column-reverse;
         gap: 14px;
+    }
+
+    .PosicaoCaua.em-destaque img,
+    .PosicaoOsana.em-destaque img,
+    .PosicaoRamirez.em-destaque img,
+    .PosicaoMiqueias.em-destaque img,
+    .PosicaoMaya.em-destaque img {
+        max-height: 44vh;
     }
 }

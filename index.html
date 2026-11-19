@@ -32,10 +32,7 @@
             justify-content: space-between;
             align-items: center;
         }
-
-        /* =========================================
-           TELAS INTERMEDIÁRIAS DE CARREGAMENTO
-           ========================================= */
+ 
         .TelaCarregamento {
             position: fixed;
             inset: 0;
@@ -119,9 +116,7 @@
             text-align: left;
         }
 
-        /* =========================================
-           BALÃO DE AVISO NA PÁGINA (SUBSTITUI ALERT)
-           ========================================= */
+
         .OverlayBalaoAviso {
             display: none;
             position: fixed;
@@ -197,9 +192,6 @@
             box-shadow: 0 2px 0 #b8860b;
         }
 
-        /* =========================================
-           1. LOGOS NO TOPO (ALINHADAS AOS BLOCOS)
-           ========================================= */
         .AlinharLogos {
             display: flex;
             justify-content: space-between;
@@ -218,9 +210,6 @@
             filter: drop-shadow(0px 5px 10px rgba(0, 0, 0, 0.55));
         }
 
-        /* =========================================
-           2. TÍTULO PRINCIPAL EM HTML E CHAMADA
-           ========================================= */
         .CabecalhoTitulo {
             width: 96%;
             max-width: 980px;
@@ -336,9 +325,7 @@
             border-color: #ffffff;
         }
 
-        /* =========================================
-           4. ÁREA DE CADASTRO (MESMA LARGURA 980px)
-           ========================================= */
+
         .AreaCadastro {
             background-color: rgba(12, 16, 46, 0.94);
             border: 3px solid #ffffff;
@@ -449,9 +436,7 @@
             box-shadow: 0 2px 0 #b8860b;
         }
 
-        /* =========================================
-           5. TOP 3 ALUNOS (MESMA LARGURA 980px)
-           ========================================= */
+
         .AreaRanking {
             background-color: rgba(12, 16, 46, 0.88);
             border: 3px solid #ffd166;
@@ -509,7 +494,6 @@
             color: #4ade80;
         }
 
-        /* 6. Créditos */
         .Creditos {
             width: 96%;
             max-width: 980px;
@@ -540,7 +524,6 @@
 </head>
 
 <body>
-    <!-- Tela Intermediária 1: Carregamento no Início do Index -->
     <div id="telaCarregamentoInicial" class="TelaCarregamento">
         <div class="CaixaLoader">
             <h2 class="TituloLoader">ACADEMIA DA INCLUSÃO</h2>
@@ -555,7 +538,6 @@
         </div>
     </div>
 
-    <!-- Tela Intermediária 2: Transição entre o Index e a Sala de Aula -->
     <div id="telaTransicaoJogo" class="TelaCarregamento oculta">
         <div class="CaixaLoader">
             <h2 id="tituloTransicaoJogo" class="TituloLoader">ENTRANDO NA SALA Nº 8...</h2>
@@ -569,7 +551,6 @@
         </div>
     </div>
 
-    <!-- Balão de aviso na própria página (substitui o alert) -->
     <div id="balaoAvisoOverlay" class="OverlayBalaoAviso">
         <div class="BalaoAviso">
             <h3 id="tituloBalaoAviso" class="TituloBalaoAviso">Atenção!</h3>
@@ -580,14 +561,12 @@
         </div>
     </div>
 
-    <!-- Logos -->
     <div class="AlinharLogos">
         <img src="LogoSedu.png" alt="Logo SEDU" class="EstiloLogos">
         <img src="LogoDsm.png" alt="Logo DSM" class="EstiloLogos">
         <img src="LogoEmescan.png" alt="Logo EMESCAM" class="EstiloLogos">
     </div>
 
-    <!-- Título Principal em HTML -->
     <header class="CabecalhoTitulo">
         <h1 class="TituloPrincipal">
             Academia da
@@ -596,7 +575,6 @@
         <p class="SubtituloHeroi">Escolha seu herói</p>
     </header>
 
-    <!-- Milly e Lucas (alinhados com o formulário e o ranking) -->
     <div class="EstiloDupla">
         <button id="Milly" type="button" class="EstiloPersonagens" onclick="SelecionarHeroi('Milly')">
             <img src="Milly.png" alt="Milly">
@@ -634,7 +612,6 @@
         <button type="submit" class="BotaoConfirmar">CONFIRMAR E JOGAR</button>
     </form>
 
-    <!-- Ranking Top 3 -->
     <section class="AreaRanking">
         <h2 class="TituloSecao">Top 3 Melhores Pontuações</h2>
         <ul class="ListaTop3">
@@ -656,7 +633,6 @@
         </ul>
     </section>
 
-    <!-- Créditos -->
     <p class="Creditos">Feito por: Estevão Pires Galvão; ES-Brasil; 2026.</p>
 
     <script src="AcademiadaInclusao.js"></script>

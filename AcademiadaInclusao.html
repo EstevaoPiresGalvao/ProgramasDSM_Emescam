@@ -11,10 +11,9 @@
 </head>
 
 <body>
-    <!-- Tela Intermediária de Carregamento da Sala -->
     <div id="telaCarregamentoSala" class="TelaCarregamento">
         <div class="CaixaLoader">
-            <h2 class="TituloLoader">SALA DE AULA Nº 8</h2>
+            <h2 class="TituloLoader">SALA DE AULA</h2>
             <p class="TextoLoader">Carregando cenário e colegas...</p>
             <div class="BarraProgressoFundo">
                 <div id="barraProgressoSala" class="BarraProgressoPreenchimento"></div>
@@ -22,7 +21,6 @@
         </div>
     </div>
 
-    <!-- Balão de aviso / reação na própria página (substitui o alert) -->
     <div id="balaoAvisoOverlay" class="OverlayBalaoAviso">
         <div class="BalaoAviso">
             <h3 id="tituloBalaoAviso" class="TituloBalaoAviso">Aviso</h3>
@@ -34,10 +32,7 @@
             </div>
         </div>
     </div>
-
-    <!-- =========================================
-         QUADRO SOBREPOSTO DOS MINI-GAMES
-         ========================================= -->
+    
     <div id="miniGameOverlay" class="OverlayMiniGame">
         <div class="QuadroMiniGame">
             <div class="CabecalhoMiniGame">
@@ -47,7 +42,6 @@
 
             <p id="instrucaoMiniGame" class="InstrucaoMiniGame"></p>
 
-            <!-- Área dinâmica onde cada mini-game é desenhado -->
             <div id="conteudoMiniGame" class="ConteudoMiniGame"></div>
 
             <p id="feedbackMiniGame" class="FeedbackMiniGame"></p>
@@ -56,23 +50,21 @@
         </div>
     </div>
 
-    <!-- Barra superior do Totem (Jogador + Pontos + Finalizar) -->
     <header class="BarraTotem">
         <div class="InfoJogador">
             <span id="hudJogador">Jogador: Visitante</span>
             <span id="hudPontos" class="BadgePontos">Pontos: 0</span>
         </div>
         <button type="button" class="BotaoFinalizar" onclick="ConfirmarFinalizacao()">
-            FINALIZAR RODADA
+            ENCERRAR JOGO
         </button>
     </header>
 
-    <!-- Camada que escurece e embaça o fundo ao conversar -->
     <div id="overlayFoco" class="OverlayFoco" onclick="FecharDialogo()"></div>
 
     <div class="Titulo">
-        <h1 class="A1">~ Sala de aula Nº 8 ~</h1>
-        <h2 class="A1">Toque nos colegas que não saíram para o recreio e descubra como ajudar!</h2>
+        <h1 class="A1">~ Sala de aula~</h1>
+        <h2 class="A1">Alguns colegas não saíram para o intervalo, descubra o porquê</h2>
     </div>
     
     <!-- Setor Cauã -->
@@ -83,24 +75,23 @@
 
         <div id="menuCaua" class="OrganizarBotoes">
             <div class="BalaoPersonagem">
-                <span class="NomeFalante">Cauã diz:</span>
+                <span class="NomeFalante">Cauã fala:</span>
                 <p id="falaCaua" class="TextoFalante"></p>
             </div>
 
-            <p class="InstrucaoMenu">Como você responde? (Responda rápido para bônus!)</p>
+            <p class="InstrucaoMenu">Como você responde?</p>
             <button id="11caua" type="button" onclick="Responder('Caua', -5)" class="BalaodeFalaNormal">
-                Desculpa, estou ocupado agora.
+                "Desculpa, estou ocupado agora"
             </button>
             <button id="12caua" type="button" onclick="Responder('Caua', -10)" class="BalaodeFalaNormal">
-                Oxi, dá teu jeito irmão.
+                "Oxi, dá teu jeito irmão"
             </button>
             <button id="13caua" type="button" onclick="Responder('Caua', 10)" class="BalaodeFalaNormal">
-                Claro! Vamos juntos, eu te guio até a porta.
+                "Claro! Vamos juntos, eu te guio até a porta!"
             </button>
         </div>
     </div>
 
-    <!-- Setor Osana -->
     <div id="setorOsana" class="PosicaoOsana">
         <button id="Osana" type="button" onclick="AbrirDialogo('Osana')" class="EstiloOsana">
             <img src="Osana.png" alt="Osana">
@@ -112,20 +103,19 @@
                 <p id="falaOsana" class="TextoFalante"></p>
             </div>
 
-            <p class="InstrucaoMenu">Como você responde? (Responda rápido para bônus!)</p>
+            <p class="InstrucaoMenu">Como você responde?</p>
             <button id="11Osana" type="button" onclick="Responder('Osana', -5)" class="BalaodeFalaNormal">
-                Deixa que eu empurro sua cadeira logo! (sem pedir)
+                *Ignorar o pedido e empurrar cadeira*
             </button>
             <button id="12Osana" type="button" onclick="Responder('Osana', -10)" class="BalaodeFalaNormal">
-                É melhor você ficar na sala mesmo, lá fora está cheio.
+                "É melhor você ficar na sala mesmo, lá fora está cheio."
             </button>
             <button id="13Osana" type="button" onclick="Responder('Osana', 10)" class="BalaodeFalaNormal">
-                Claro! Quer ajuda para desenrolar essas cordas da roda?
+                "Claro! Deixa eu te dar uma mãozinha nisso!"
             </button>
         </div>
     </div>
     
-    <!-- Setor Ramirez -->
     <div id="setorRamirez" class="PosicaoRamirez">
         <button id="Ramirez" type="button" onclick="AbrirDialogo('Ramirez')" class="EstiloRamirez">
             <img src="Ramirez.png" alt="Ramirez">
@@ -133,24 +123,23 @@
 
         <div id="menuRamirez" class="OrganizarBotoes">
             <div class="BalaoPersonagem">
-                <span class="NomeFalante">Ramirez diz:</span>
+                <span class="NomeFalante">Ramirez parece distraído...</span>
                 <p id="falaRamirez" class="TextoFalante"></p>
             </div>
 
-            <p class="InstrucaoMenu">O que você faz? (Responda rápido para bônus!)</p>
+            <p class="InstrucaoMenu">Como você haje? </p>
             <button id="11Ramirez" type="button" onclick="Responder('Ramirez', -5)" class="BalaodeFalaNormal">
-                Gritar bem alto de costas para ele ouvir.
+                *Gritar bem alto de costas para ele ouvir.*
             </button>
             <button id="12Ramirez" type="button" onclick="Responder('Ramirez', -10)" class="BalaodeFalaNormal">
-                Deixar para lá, vai dar muito trabalho explicar.
+                *Deixar para lá, vai dar muito trabalho explicar.*
             </button>
             <button id="13Ramirez" type="button" onclick="Responder('Ramirez', 10)" class="BalaodeFalaNormal">
-                Tocar levemente no ombro dele, olhar de frente e fazer sinais.
+                *Tocar levemente no ombro dele, olhar de frente e fazer sinais.*
             </button>
         </div>
     </div>
 
-    <!-- Setor Miqueias (Personagem sem deficiência - mexendo no celular) -->
     <div id="setorMiqueias" class="PosicaoMiqueias">
         <button id="Miqueias" type="button" onclick="AbrirDialogo('Miqueias')" class="EstiloMiqueias">
             <img src="Miqueias.png" alt="Miqueias">
@@ -158,7 +147,7 @@
 
         <div id="menuMiqueias" class="OrganizarBotoes">
             <div class="BalaoPersonagem">
-                <span class="NomeFalante">Miqueias diz:</span>
+                <span class="NomeFalante">Miqueias expressa:</span>
                 <p id="falaMiqueias" class="TextoFalante"></p>
             </div>
 
@@ -167,7 +156,6 @@
         </div>
     </div>
 
-    <!-- Setor Maya (Personagem sem deficiência - lendo um livro) -->
     <div id="setorMaya" class="PosicaoMaya">
         <button id="Maya" type="button" onclick="AbrirDialogo('Maya')" class="EstiloMaya">
             <img src="Maya.png" alt="Maya">
@@ -175,7 +163,7 @@
 
         <div id="menuMaya" class="OrganizarBotoes">
             <div class="BalaoPersonagem">
-                <span class="NomeFalante">Maya diz:</span>
+                <span class="NomeFalante">Maya fala:</span>
                 <p id="falaMaya" class="TextoFalante"></p>
             </div>
 

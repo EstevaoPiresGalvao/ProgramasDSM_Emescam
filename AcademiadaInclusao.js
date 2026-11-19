@@ -26,10 +26,7 @@ const etapaDialogoSimples = {
     Maya: 1
 };
 
-/* =========================================
-   SISTEMA DE BALÃO NA PÁGINA (SUBSTITUI ALERT)
-   ========================================= */
-function MostrarBalaoAviso(titulo, mensagem, textoBotao = "ENTENDI", callback = null, mostrarCancelar = false) {
+function MostrarBalaoAviso(titulo, mensagem, textoBotao = "BORA!", callback = null, mostrarCancelar = false) {
     const overlay = document.getElementById("balaoAvisoOverlay");
     const tituloEl = document.getElementById("tituloBalaoAviso");
     const textoEl = document.getElementById("textoBalaoAviso");
@@ -75,9 +72,6 @@ function FecharBalaoAviso(confirmado = true) {
     }
 }
 
-/* =========================================
-   TELAS INTERMEDIÁRIAS DE CARREGAMENTO
-   ========================================= */
 function ControlarCarregamentoPagina(idTela, idBarra, imagensExtras = [], duracaoMinimaMs = 450, idPorcentagem = null) {
     const tela = document.getElementById(idTela);
     const barra = document.getElementById(idBarra);
@@ -151,9 +145,6 @@ function ControlarCarregamentoPagina(idTela, idBarra, imagensExtras = [], duraca
     setTimeout(concluirCarregamento, Math.max(3500, duracaoMinimaMs + 1500));
 }
 
-/* =========================================
-   INICIALIZAÇÃO AUTOMÁTICA DAS PÁGINAS
-   ========================================= */
 document.addEventListener("DOMContentLoaded", () => {
     if (document.getElementById("telaCarregamentoInicial")) {
         ControlarCarregamentoPagina(
@@ -189,9 +180,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-/* =========================================
-   FUNÇÕES DA TELA INICIAL (index.html)
-   ========================================= */
 function SelecionarHeroi(nomeHeroi) {
     HeroiSelecionado = nomeHeroi;
 
@@ -265,7 +253,7 @@ function IniciarTransicaoParaSala(nomeJogador, heroi) {
         tituloEl.textContent = `VAMOS LÁ, ${heroi.toUpperCase()}!`;
     }
     if (textoEl) {
-        textoEl.textContent = `Preparando a Sala de Aula Nº 8 para ${nomeJogador}...`;
+        textoEl.textContent = `Preparando a Sala de Aula para ${nomeJogador}...`;
     }
 
     telaTransicao.classList.remove("oculta");
@@ -328,23 +316,23 @@ function PreencherFalasPersonagens(heroi) {
     const falaMaya = document.getElementById("falaMaya");
 
     if (falaCaua) {
-        falaCaua.innerHTML = `"E aí, <span class="DestaqueHeroi">${heroi}</span>! Tudo tranquilo? O sinal do recreio já bateu, mas estou com receio de esbarrar nas carteiras. Pode me guiar até a porta?"`;
+        falaCaua.innerHTML = `"E aí, <span class="DestaqueHeroi">${heroi}</span>! Tá livre? O sinal do recreio já bateu, mas estou com receio de esbarrar nas carteiras porque minha bengala quebrou. Pode me guiar até a porta?"`;
     }
 
     if (falaOsana) {
-        falaOsana.innerHTML = `"Oi, <span class="DestaqueHeroi">${heroi}</span>! Que bom que você ainda está aí! Umas cordas enroscaram na roda da minha cadeira e ela travou. Dá uma mãozinha aqui?"`;
+        falaOsana.innerHTML = `"Opa, <span class="DestaqueHeroi">${heroi}</span>! Dá uma mãozinha aqui? Umas cordas enroscaram na roda da minha cadeira e ela travou!"`;
     }
 
     if (falaRamirez) {
-        falaRamirez.innerHTML = `"Hmm... parece que todo mundo já saiu e eu nem ouvi o sinal bater! Ei, <span class="DestaqueHeroi">${heroi}</span>, você ainda está na sala?"`;
+        falaRamirez.innerHTML = `*Ramirez parece distraído, ele não notou sua presença*`;
     }
 
     if (falaMiqueias) {
-        falaMiqueias.innerHTML = `"Opa, <span class="DestaqueHeroi">${heroi}</span>! Nem vi o tempo passar aqui mexendo no celular..."`;
+        falaMiqueias.innerHTML = `"Fala, <span class="DestaqueHeroi">${heroi}</span>! Tô quase pegando 3 coroas no Clash aqui"`;
     }
 
     if (falaMaya) {
-        falaMaya.innerHTML = `"Ah, oi <span class="DestaqueHeroi">${heroi}</span>! Esse capítulo do livro está tão interessante que nem notei a sala esvaziando..."`;
+        falaMaya.innerHTML = `"Ah, oi <span class="DestaqueHeroi">${heroi}</span>! Esse romance está tão fofo, daqui a pouco eu saio"`;
     }
 }
 
@@ -361,15 +349,15 @@ function MontarDialogoSimples(nomePersonagem, etapa) {
     const roteirosSimples = {
         Miqueias: {
             1: {
-                fala: `"Opa, <span class="DestaqueHeroi">${heroi}</span>! Nem vi o tempo passar aqui mexendo no celular..."`,
-                instrucao: "O que você pergunta?",
+                fala: `"Fala, <span class="DestaqueHeroi">${heroi}</span>! Tô quase pegando 3 coroas no Clash aqui"`,
+                instrucao: "O que você diz?",
                 opcoes: [
-                    "O sinal já bateu! Por que você ainda está na sala mexendo no celular?",
-                    "Ei Miqueias, não vai descer para o recreio? O que você está fazendo aí?"
+                    "O sinal já bateu! Ganha logo isso e vai comer mano!",
+                    "Vai ficar aí o recreio todo?"
                 ]
             },
             2: {
-                fala: `"É que eu estava tentando passar de fase neste jogo aqui e perdi a hora! Valeu por avisar, <span class="DestaqueHeroi">${heroi}</span>, já vou guardar o celular."`,
+                fala: `"Tô quase ganhando, calma ai"`,
                 instrucao: "Despeça-se do colega:",
                 opcoes: [
                     "Beleza então! Até mais tarde no intervalo, Miqueias!",
@@ -379,15 +367,15 @@ function MontarDialogoSimples(nomePersonagem, etapa) {
         },
         Maya: {
             1: {
-                fala: `"Ah, oi <span class="DestaqueHeroi">${heroi}</span>! Esse capítulo do livro está tão interessante que nem notei a sala esvaziando..."`,
+                fala: `"Ah, oi <span class="DestaqueHeroi">${heroi}</span>! Esse romance está tão fofo, daqui a pouco eu saio"`,
                 instrucao: "O que você pergunta?",
                 opcoes: [
-                    "O sinal do recreio já tocou! Por que você ainda está na sala?",
-                    "Ei Maya, esse livro deve estar bom mesmo! Por que não saiu para o intervalo ainda?"
+                    "O sinal do recreio já tocou! Não dá pra ler isso lá fora?",
+                    "Ei Maya, esse livro deve estar bom mesmo! Mas você não vai comer então?"
                 ]
             },
             2: {
-                fala: `"Faltavam só duas páginas para eu terminar esse capítulo de aventura! Obrigada por me lembrar, <span class="DestaqueHeroi">${heroi}</span>, já estou indo!"`,
+                fala: `"O clima já está acabando, daqui a pouco eu saio."`,
                 instrucao: "Despeça-se da colega:",
                 opcoes: [
                     "Combinado! Boa leitura e até mais, Maya!",
@@ -421,7 +409,6 @@ function AvancarDialogoSimples(nomePersonagem, etapaAtual) {
         return;
     }
 
-    // Etapa 2: Despedida concluída (sem contar pontos)
     FecharDialogo();
     personagensRespondidos[nomePersonagem] = true;
 
@@ -432,7 +419,7 @@ function AvancarDialogoSimples(nomePersonagem, etapaAtual) {
 
     const heroi = localStorage.getItem("jogadorHeroi") || "Milly";
     const despedidas = {
-        Miqueias: `<strong>Miqueias:</strong> "Valeu pelo toque, <span class="DestaqueHeroi">${heroi}</span>! Até mais!"`,
+        Miqueias: `<strong>Miqueias:</strong> "Obrigado por avisar, <span class="DestaqueHeroi">${heroi}</span>! Até logo!"`,
         Maya: `<strong>Maya:</strong> "Obrigada, <span class="DestaqueHeroi">${heroi}</span>! Até mais tarde!"`
     };
 
@@ -454,13 +441,13 @@ function CalcularBonusVelocidade(segundos) {
 function ObterReacaoPersonagem(nomePersonagem, pontos, heroi, bonusVelocidade = 0) {
     const textoBonus =
         bonusVelocidade > 0
-            ? ` (+20 pts + ${bonusVelocidade} pts bônus de velocidade!)<br><span class="DestaqueVelocidade">⚡ Resposta rápida: +${bonusVelocidade} pts extras!</span>`
+            ? ` (+20 pts + ${bonusVelocidade} pts bônus de velocidade!)<br><span class="DestaqueVelocidade">Que dedo veloz! +${bonusVelocidade} pts extras!</span>`
             : ` (+20 pts com bônus de ajuda!)`;
 
     const reacoes = {
         Caua: {
             10: `<strong>Cauã:</strong> "Valeu mesmo, <span class="DestaqueHeroi">${heroi}</span>! Me guiar desviando das carteiras com calma faz toda a diferença!"${textoBonus}`,
-            "-5": `<strong>Cauã:</strong> "Ah, tudo bem, <span class="DestaqueHeroi">${heroi}</span>... vou tentar ir bem devagar com a minha bengala." (-5 pts)`,
+            "-5": `<strong>Cauã:</strong> "Ah, tudo bem, <span class="DestaqueHeroi">${heroi}</span>... vou tentar ir bem devagar com a minha bengala quebrada." (-5 pts)`,
             "-10": `<strong>Cauã:</strong> "Poxa, <span class="DestaqueHeroi">${heroi}</span>... não precisava responder assim, eu só pedi uma ajuda." (-10 pts)`
         },
         Osana: {
@@ -482,7 +469,7 @@ function AbrirDialogo(nomePersonagem) {
     if (personagensRespondidos[nomePersonagem]) {
         MostrarBalaoAviso(
             "Colega já atendido!",
-            "Você já conversou com este colega. Toque nos outros colegas da sala para continuar!"
+            "Você já conversou com este colega. Experimente bater papo com os outros alunos!"
         );
         return;
     }
@@ -530,7 +517,6 @@ function Responder(nomePersonagem, pontos) {
     const tempoDecorrido = (Date.now() - TempoInicioResposta) / 1000;
     FecharDialogo();
 
-    // Se o jogador decidiu ajudar (pontos > 0), calcula bônus de velocidade e abre o mini-game!
     if (pontos > 0) {
         const bonusVelocidade = CalcularBonusVelocidade(tempoDecorrido);
         bonusVelocidadePorPersonagem[nomePersonagem] = bonusVelocidade;
@@ -540,7 +526,6 @@ function Responder(nomePersonagem, pontos) {
         return;
     }
 
-    // Se recusou ajuda, finaliza a interação diretamente com penalidade
     personagensRespondidos[nomePersonagem] = true;
     const botaoPersonagem = document.getElementById(nomePersonagem);
     if (botaoPersonagem) {
@@ -566,7 +551,7 @@ function ExibirConclusaoInteracao(nomePersonagem, pontosBase, bonusVelocidade = 
                 MostrarBalaoAviso(
                     "Rodada Concluída!",
                     `Parabéns, <strong>${heroi}</strong>! Você ajudou todos os colegas da sala.<br><br>Pontuação final: <strong>${PontosTotais} pts</strong>.`,
-                    "SALVAR NO RANKING",
+                    "SALVAR RESULTADO",
                     () => FinalizarJogo()
                 );
             }
@@ -574,9 +559,7 @@ function ExibirConclusaoInteracao(nomePersonagem, pontosBase, bonusVelocidade = 
     );
 }
 
-/* =========================================
-   CONTROLADOR GERAL DOS MINI-GAMES
-   ========================================= */
+
 function IniciarMiniGame(nomePersonagem) {
     const overlay = document.getElementById("miniGameOverlay");
     const feedback = document.getElementById("feedbackMiniGame");
@@ -623,9 +606,7 @@ function ConcluirMiniGame(nomePersonagem) {
     ExibirConclusaoInteracao(nomePersonagem, 10, bonusVelocidade);
 }
 
-/* =========================================
-   MINI-GAME 1: CAUÃ (GUIAR ATÉ A PORTA)
-   ========================================= */
+
 function MontarMiniGameCaua() {
     const titulo = document.getElementById("tituloMiniGame");
     const badge = document.getElementById("badgeProgressoMiniGame");
@@ -884,9 +865,6 @@ function MontarMiniGameCaua() {
     desenharMapa();
 }
 
-/* =========================================
-   MINI-GAME 2: OSANA (DESENROLAR CORDAS)
-   ========================================= */
 function MontarMiniGameOsana() {
     const titulo = document.getElementById("tituloMiniGame");
     const badge = document.getElementById("badgeProgressoMiniGame");
@@ -1075,9 +1053,6 @@ function MontarMiniGameOsana() {
     desenharRoda();
 }
 
-/* =========================================
-   MINI-GAME 3: RAMIREZ (ESCOLHER SINAL DE MÃO)
-   ========================================= */
 function MontarMiniGameRamirez() {
     const titulo = document.getElementById("tituloMiniGame");
     const badge = document.getElementById("badgeProgressoMiniGame");
@@ -1219,9 +1194,6 @@ function MontarMiniGameRamirez() {
     renderizarEtapa();
 }
 
-/* =========================================
-   PONTUAÇÃO E FINALIZAÇÃO
-   ========================================= */
 function AtualizarPontos() {
     PontosTotais = Number(PontosTotais) + VariacaoPontos;
     VariacaoPontos = 0;

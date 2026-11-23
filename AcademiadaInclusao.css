@@ -21,7 +21,9 @@ body {
     font-family: 'Inter', sans-serif;
 }
 
-
+/* =========================================
+   TELA INTERMEDIÁRIA DE CARREGAMENTO
+   ========================================= */
 .TelaCarregamento {
     position: fixed;
     inset: 0;
@@ -184,6 +186,9 @@ body {
     transform: translateY(3px);
 }
 
+/* =========================================
+   QUADRO SOBREPOSTO DOS MINI-GAMES
+   ========================================= */
 .OverlayMiniGame {
     display: none;
     position: fixed;
@@ -386,6 +391,9 @@ body {
     }
 }
 
+/* =========================================
+   BARRA SUPERIOR DO TOTEM
+   ========================================= */
 .BarraTotem {
     position: fixed;
     top: 0;
@@ -438,6 +446,9 @@ body {
     background-color: #22c55e;
 }
 
+/* =========================================
+   TÍTULO DA SALA
+   ========================================= */
 .Titulo {
     color: white;
     text-align: center;
@@ -472,6 +483,9 @@ body {
     z-index: 10;
 }
 
+/* =========================================
+   BALÃO DE FALA DO PERSONAGEM + OPÇÕES
+   ========================================= */
 .OrganizarBotoes {
     display: none;
     flex-direction: column;
@@ -561,16 +575,137 @@ body {
     filter: grayscale(45%) drop-shadow(0px 8px 6px rgba(0, 0, 0, 0.6)) !important;
 }
 
+/* =========================================
+   SETORES DOS PERSONAGENS (PERSPECTIVA E CHÃO)
+   ========================================= */
 
-.PosicaoCaua {
+/* 1. Ramirez — Fundo central (mais distante, menor escala, apoiado no chão) */
+.PosicaoRamirez {
     position: fixed;
-    bottom: 6%;
-    right: 2%;
+    bottom: 43%;
+    left: 44%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    z-index: 2;
+}
+
+.PosicaoRamirez.em-destaque {
+    z-index: 25;
+}
+
+.EstiloRamirez {
+    width: clamp(95px, 13vw, 165px);
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.EstiloRamirez img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0px 6px 4px rgba(0, 0, 0, 0.65));
+}
+
+.PosicaoRamirez.em-destaque .EstiloRamirez img {
+    filter: drop-shadow(0px 10px 16px rgba(255, 255, 255, 0.45));
+    transform: scale(1.1);
+}
+
+/* 2. Maya — Plano de fundo direito (lendo livro em pé no chão) */
+.PosicaoMaya {
+    position: fixed;
+    bottom: 38%;
+    right: 11%;
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
     gap: 20px;
-    z-index: 6;
+    z-index: 3;
+}
+
+.PosicaoMaya.em-destaque {
+    z-index: 25;
+}
+
+.EstiloMaya {
+    width: clamp(110px, 15vw, 190px);
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.EstiloMaya img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0px 8px 5px rgba(0, 0, 0, 0.65));
+}
+
+.PosicaoMaya.em-destaque .EstiloMaya img {
+    filter: drop-shadow(0px 10px 16px rgba(255, 255, 255, 0.45));
+    transform: scale(1.08);
+}
+
+/* 3. Miqueias — Plano intermediário esquerdo (mexendo no celular em pé no chão) */
+.PosicaoMiqueias {
+    position: fixed;
+    bottom: 31%;
+    left: 12%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    z-index: 4;
+}
+
+.PosicaoMiqueias.em-destaque {
+    z-index: 25;
+}
+
+.EstiloMiqueias {
+    width: clamp(125px, 17vw, 215px);
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.EstiloMiqueias img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0px 8px 6px rgba(0, 0, 0, 0.65));
+}
+
+.PosicaoMiqueias.em-destaque .EstiloMiqueias img {
+    filter: drop-shadow(0px 10px 16px rgba(255, 255, 255, 0.45));
+    transform: scale(1.06);
+}
+
+/* 4. Cauã — Encaixado atrás da carteira da direita (pernas cobertas pela mesa) */
+.PosicaoCaua {
+    position: fixed;
+    bottom: 18.5%;
+    right: 4%;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 20px;
+    z-index: 5;
 }
 
 .PosicaoCaua.em-destaque {
@@ -578,7 +713,7 @@ body {
 }
 
 .EstiloCaua {
-    width: clamp(230px, 34vw, 638px);
+    width: clamp(145px, 20vw, 245px);
     background: transparent;
     border: none;
     outline: none;
@@ -589,23 +724,23 @@ body {
 
 .EstiloCaua img {
     width: 100%;
-    max-height: 75vh;
     height: auto;
     object-fit: contain;
     display: block;
-    filter: drop-shadow(0px 10px 6px rgba(0, 0, 0, 0.65));
+    clip-path: inset(0 0 7% 0);
+    filter: drop-shadow(0px 8px 6px rgba(0, 0, 0, 0.65));
 }
 
 .PosicaoCaua.em-destaque .EstiloCaua img {
     filter: drop-shadow(0px 10px 16px rgba(255, 255, 255, 0.45));
-    transform: scale(1.04);
+    transform: scale(1.05);
 }
 
-/* Osana: 310px * 2.5 = 775px */
+/* 5. Osana — Primeiro plano esquerdo (mais próxima, maior escala, apoiada no piso) */
 .PosicaoOsana {
     position: fixed;
-    bottom: 5%;
-    left: 2%;
+    bottom: 4%;
+    left: 4%;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -618,7 +753,7 @@ body {
 }
 
 .EstiloOsana {
-    width: clamp(270px, 40vw, 775px);
+    width: clamp(175px, 24vw, 295px);
     background: transparent;
     border: none;
     outline: none;
@@ -629,7 +764,6 @@ body {
 
 .EstiloOsana img {
     width: 100%;
-    max-height: 75vh;
     height: auto;
     object-fit: contain;
     display: block;
@@ -641,124 +775,9 @@ body {
     transform: scale(1.04);
 }
 
-.PosicaoRamirez {
-    position: fixed;
-    bottom: 36%;
-    left: 41%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 20px;
-    z-index: 4;
-}
-
-.PosicaoRamirez.em-destaque {
-    z-index: 25;
-}
-
-.EstiloRamirez {
-    width: clamp(195px, 28vw, 563px);
-    background: transparent;
-    border: none;
-    outline: none;
-    padding: 0;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.EstiloRamirez img {
-    width: 100%;
-    max-height: 70vh;
-    height: auto;
-    object-fit: contain;
-    display: block;
-    filter: drop-shadow(0px 8px 5px rgba(0, 0, 0, 0.65));
-}
-
-.PosicaoRamirez.em-destaque .EstiloRamirez img {
-    filter: drop-shadow(0px 10px 16px rgba(255, 255, 255, 0.45));
-    transform: scale(1.08);
-}
-
-.PosicaoMiqueias {
-    position: fixed;
-    bottom: 33%;
-    left: 16%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 20px;
-    z-index: 5;
-}
-
-.PosicaoMiqueias.em-destaque {
-    z-index: 25;
-}
-
-.EstiloMiqueias {
-    width: clamp(210px, 30vw, 600px);
-    background: transparent;
-    border: none;
-    outline: none;
-    padding: 0;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.EstiloMiqueias img {
-    width: 100%;
-    max-height: 72vh;
-    height: auto;
-    object-fit: contain;
-    display: block;
-    filter: drop-shadow(0px 10px 6px rgba(0, 0, 0, 0.65));
-}
-
-.PosicaoMiqueias.em-destaque .EstiloMiqueias img {
-    filter: drop-shadow(0px 10px 16px rgba(255, 255, 255, 0.45));
-    transform: scale(1.04);
-}
-
-/* Maya (livro): 240px * 2.5 = 600px */
-.PosicaoMaya {
-    position: fixed;
-    bottom: 33%;
-    right: 16%;
-    display: flex;
-    flex-direction: row-reverse;
-    align-items: center;
-    gap: 20px;
-    z-index: 5;
-}
-
-.PosicaoMaya.em-destaque {
-    z-index: 25;
-}
-
-.EstiloMaya {
-    width: clamp(210px, 30vw, 600px);
-    background: transparent;
-    border: none;
-    outline: none;
-    padding: 0;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.EstiloMaya img {
-    width: 100%;
-    max-height: 72vh;
-    height: auto;
-    object-fit: contain;
-    display: block;
-    filter: drop-shadow(0px 10px 6px rgba(0, 0, 0, 0.65));
-}
-
-.PosicaoMaya.em-destaque .EstiloMaya img {
-    filter: drop-shadow(0px 10px 16px rgba(255, 255, 255, 0.45));
-    transform: scale(1.04);
-}
-
+/* =========================================
+   AJUSTES PARA MODO RETRATO / TOTEM / CELULAR
+   ========================================= */
 @media (orientation: portrait), (max-width: 900px) {
     .OrganizarBotoes {
         width: 94vw;
@@ -771,44 +790,49 @@ body {
         padding: 16px 18px;
     }
 
-    .PosicaoCaua {
-        right: 2%;
-        bottom: 5%;
-    }
-    .EstiloCaua {
-        width: clamp(220px, 36vw, 663px);
-    }
-
-    .PosicaoOsana {
-        left: 2%;
-        bottom: 5%;
-    }
-    .EstiloOsana {
-        width: clamp(260px, 42vw, 788px);
-    }
-
+    /* Fundo central: Ramirez no banco */
     .PosicaoRamirez {
-        left: 36%;
-        bottom: 38%;
+        left: 43%;
+        bottom: 44%;
     }
     .EstiloRamirez {
-        width: clamp(185px, 30vw, 563px);
+        width: clamp(88px, 19vw, 145px);
     }
 
-    .PosicaoMiqueias {
-        left: 10%;
-        bottom: 34%;
-    }
-    .EstiloMiqueias {
-        width: clamp(200px, 32vw, 600px);
-    }
-
+    /* Fundo direito: Maya em pé lendo livro */
     .PosicaoMaya {
-        right: 10%;
-        bottom: 34%;
+        right: 7%;
+        bottom: 39%;
     }
     .EstiloMaya {
-        width: clamp(200px, 32vw, 600px);
+        width: clamp(105px, 23vw, 175px);
+    }
+
+    /* Meio esquerdo: Miqueias em pé no celular */
+    .PosicaoMiqueias {
+        left: 6%;
+        bottom: 31%;
+    }
+    .EstiloMiqueias {
+        width: clamp(120px, 26vw, 195px);
+    }
+
+    /* Frente direita: Cauã encaixado atrás da carteira */
+    .PosicaoCaua {
+        right: 2%;
+        bottom: 18.5%;
+    }
+    .EstiloCaua {
+        width: clamp(140px, 30vw, 220px);
+    }
+
+    /* Frente esquerda: Osana no piso da sala */
+    .PosicaoOsana {
+        left: 2%;
+        bottom: 4%;
+    }
+    .EstiloOsana {
+        width: clamp(170px, 37vw, 265px);
     }
 
     .PosicaoCaua.em-destaque,
@@ -824,11 +848,19 @@ body {
         gap: 14px;
     }
 
+    .PosicaoCaua.em-destaque .EstiloCaua,
+    .PosicaoOsana.em-destaque .EstiloOsana,
+    .PosicaoRamirez.em-destaque .EstiloRamirez,
+    .PosicaoMiqueias.em-destaque .EstiloMiqueias,
+    .PosicaoMaya.em-destaque .EstiloMaya {
+        width: clamp(190px, 44vw, 290px);
+    }
+
     .PosicaoCaua.em-destaque img,
     .PosicaoOsana.em-destaque img,
     .PosicaoRamirez.em-destaque img,
     .PosicaoMiqueias.em-destaque img,
     .PosicaoMaya.em-destaque img {
-        max-height: 44vh;
+        max-height: 42vh;
     }
 }

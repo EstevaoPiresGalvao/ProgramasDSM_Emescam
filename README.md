@@ -1,2 +1,2 @@
-# ProgramasDSM_Emescan
+# AcademiaDaInclusao
 Programa interativo desenvolvido por estudantes da EEEM Doutor Silva Mello em parceria com o programa de iniciação científica PIBIC promovida pela Emescan. O objetivo principal é promover a inclusão e conscientizar acerca do capacitismo e seus malefícios sociais, de forma didática e atrativa aos alunos. Esse jogo roda em qualquer navegador, até mesmo com serviços de Touch Screen.
